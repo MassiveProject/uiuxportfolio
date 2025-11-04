@@ -1,0 +1,149 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+/* === Aeonik Trial (OTF) self-host === */
+@layer base {
+  @font-face {
+    font-family: "Aeonik Trial";
+    src:
+      url("/AeonikTRIAL-Light.woff2") format("woff2"),
+      url("/AeonikTRIAL-Light.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Aeonik Trial";
+    src:
+      url("/AeonikTRIAL-Regular.woff2") format("woff2"),
+      url("/AeonikTRIAL-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Aeonik Trial";
+    src:
+      url("/AeonikTRIAL-Bold.woff2") format("woff2"),
+      url("/AeonikTRIAL-Bold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Aeonik Trial";
+    src:
+      url("/AeonikTRIAL-RegularItalic.woff2") format("woff2"),
+      url("/AeonikTRIAL-RegularItalic.otf") format("opentype");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  html {
+    font-family: "Aeonik Trial", ui-sans-serif, system-ui, -apple-system,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  }
+}
+
+/* Animasi kamu tetap */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeSlide { animation: fadeSlide 0.45s ease-out both; }
+
+/* ==== Floating icons (glassmorph) ==== */
+/* gabungkan X+Y+rotate jadi 1 animasi biar transform tidak bentrok */
+@keyframes floatXY {
+  0%   { transform: translate(-6px, 0) rotate(0deg); }
+  50%  { transform: translate(6px, -10px) rotate(1deg); }
+  100% { transform: translate(-6px, 0) rotate(0deg); }
+}
+
+.bg-icon{
+  position:absolute;
+  opacity:.25; /* halus */
+  filter: blur(.2px) drop-shadow(0 2px 6px rgba(0,0,0,.25));
+  will-change: transform;
+  pointer-events:none;
+  user-select:none;
+  backface-visibility:hidden;
+  transform: translate(-50%, -50%); /* pusatkan default */
+  animation: floatXY var(--dur, 9s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .bg-icon{ animation: none !important; }
+}
+
+@layer base {
+  html, body, #root {
+    @apply bg-slate-950 text-slate-100; /* atau warna dark utama kamu */
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    overflow-x: hidden; /* cegah scroll horizontal putih */
+  }
+}
+
+/* === Skills: text marquee === */
+@keyframes marqueeX {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Fade kiri/kanan agar loop mulus */
+.skill-belt-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+          mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+/* Track animasi */
+.skill-belt-track {
+  animation: marqueeX var(--speed, 22s) linear infinite;
+  will-change: transform;
+}
+
+/* Reduce motion friendly */
+@media (prefers-reduced-motion: reduce) {
+  .skill-belt-track { animation: none !important; transform: none !important; }
+}
+
+/* sembunyikan scrollbar di semua browser */
+.no-scrollbar::-webkit-scrollbar { display: none; }          /* Chrome/Safari/iOS */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* IE/Edge, Firefox */
+
+
+.design-anim{
+    background-image: linear-gradient(90deg,#f0abfc,#60a5fa,#34d399,#f0abfc);
+    background-size: 240% 100%;
+    -webkit-background-clip:text; background-clip:text;
+    color: transparent;
+    animation: designSlide 6s ease-in-out infinite;
+    position: relative;
+  }
+  .design-anim::after{
+    content:"";
+    position:absolute; left:0; right:0; top:50%; height:54%;
+    transform: translateY(-50%);
+    background: radial-gradient(40% 100% at 50% 50%, rgba(255,255,255,.5), transparent 70%);
+    filter: blur(10px);
+    opacity:.35; pointer-events:none;
+    animation: designGlow 3s ease-in-out infinite;
+  }
+  @keyframes designSlide{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+  @keyframes designGlow{
+    0%,100%{opacity:.25}
+    50%{opacity:.55}
+  }
+
+.typewriter-font{
+  font-family: "Special Elite", ui-monospace, "Courier New", monospace;
+  letter-spacing: .3px; /* biar feel-nya makin typewriter */
+}
