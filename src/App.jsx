@@ -77,9 +77,22 @@ const PROJECTS = [
 
 /* ====== VIDEO DATA ====== */
 const VIDEOS = [
-  { id: "v1", src: "/feresultprint.mp4", title: "Flashklik EasyPrint", desc: "Print Result" },
-  { id: "v2", src: "/kemenkes.mp4", title: "Flashklik RoomFlow", desc: "Trusted by KEMENKES" },
+  {
+    id: "v1",
+    title: "Flashklik EasyPrint",
+    desc: "Print Result",
+    cover: "/easyprintprintingresult.png", // taruh file cover di public/
+    youtube: "https://youtu.be/dD6Pp5XqcPw?si=N_GNckvj7qHhZzdf",
+  },
+  {
+    id: "v2",
+    title: "Flashklik RoomFlow",
+    desc: "Trusted by KEMENKES",
+    cover: "/roomflowpoly.png",
+    youtube: "https://youtu.be/w9uUPs3VhP4?si=jDzglejq7VJi8ohy",
+  },
 ];
+
 
 /* ====== STACKS DATA ====== */
 const STACKS = [
@@ -446,30 +459,14 @@ export default function Portfolio() {
 /* ====== VIDEO CAROUSEL (click-to-play, mobile friendly) ====== */
 function VideoCarouselSection({ videos = [] }) {
   const trackRef = useRef(null);
-  const videoEls = useRef({});
   const [page, setPage] = useState(0);
-  const [playingId, setPlayingId] = useState(null);
 
   const perView = 1;
   const pageCount = Math.max(1, Math.ceil(videos.length / perView));
 
-  const pauseAll = () => {
-    Object.values(videoEls.current).forEach((v) => {
-      try {
-        v?.pause?.();
-      } catch (e) {
-        // ignore harmless pause errors
-        // eslint-disable-next-line no-unused-expressions
-        e;
-      }
-    });
-    setPlayingId(null);
-  };
-
   const go = (dir) => {
     const el = trackRef.current;
     if (!el) return;
-    pauseAll();
     el.scrollBy({ left: dir * el.clientWidth, behavior: "smooth" });
   };
 
@@ -478,40 +475,15 @@ function VideoCarouselSection({ videos = [] }) {
     if (!el) return;
     const idx = Math.round(el.scrollLeft / el.clientWidth);
     setPage(idx);
-    pauseAll();
-  };
-
-  const handlePlayClick = (id) => {
-    const v = videoEls.current[id];
-    if (!v) return;
-    pauseAll();
-    try {
-      v.muted = false;
-      v.volume = 1;
-      v.play();
-      setPlayingId(id);
-    } catch (e) {
-      console.warn(e);
-    }
-  };
-
-  const handleVideoClick = (id) => {
-    const v = videoEls.current[id];
-    if (!v) return;
-    if (v.paused) handlePlayClick(id);
-    else {
-      v.pause();
-      setPlayingId(null);
-    }
   };
 
   return (
     <section className="scroll-mt-24 py-12 md:py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6 md:mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold">Video Highlights</h2>
-          <p className="mt-2 text-slate-600 dark:text-slate-300 max-w-3xl">
-            Created product videos for Flashklik—built to demo features, spark engagement, and drive conversion.
+          <h2 className="text-2xl md:text-3xl font-bold">Product Videos</h2>
+          <p className="mt-2 text-slate-600 dark:text-slate-300 whitespace-nowrap">
+            A selection of product videos I created—built to showcase features, spark engagement, and drive conversion.
           </p>
         </div>
 
@@ -522,14 +494,18 @@ function VideoCarouselSection({ videos = [] }) {
             aria-label="Previous videos"
             className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 backdrop-blur items-center justify-center hover:shadow"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 19l-7-7 7-7" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M15 19l-7-7 7-7" />
+            </svg>
           </button>
           <button
             onClick={() => go(1)}
             aria-label="Next videos"
             className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 backdrop-blur items-center justify-center hover:shadow"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 5l7 7-7 7" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
           </button>
 
           {/* track */}
@@ -541,42 +517,27 @@ function VideoCarouselSection({ videos = [] }) {
           >
             <div className="grid grid-flow-col auto-cols-[100%] md:auto-cols-[96%] gap-6 md:gap-8">
               {videos.map((v) => (
-                <article
+                <a
                   key={v.id}
-                  className="relative snap-start rounded-[32px] overflow-hidden border border-slate-200 dark:border-slate-800 bg-black"
+                  href={v.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative snap-start rounded-[32px] overflow-hidden border border-slate-200 dark:border-slate-800 bg-black group focus:outline-none"
+                  aria-label={`Open ${v.title} on YouTube`}
                 >
-                  {/* MOBILE: aspect 16:9, DESKTOP: banner fixed height */}
-                  <div
-                    className="
-                      relative w-full
-                      aspect-[16/9]
-                      md:aspect-auto md:h-[520px]
-                      lg:h-[560px]
-                      bg-black
-                    "
-                    onClick={() => handleVideoClick(v.id)}
-                  >
-                    <video
-                      ref={(el) => (videoEls.current[v.id] = el)}
-                      src={v.src}
-                      muted={false}
-                      loop
-                      playsInline
-                      controls={false}
-                      disablePictureInPicture
-                      disableRemotePlayback
-                      controlsList="nodownload noplaybackrate noremoteplayback nofullscreen"
-                      className="
-                        absolute inset-0 h-full w-full
-                        object-contain md:object-cover
-                      "
-                      preload="metadata"
+                  {/* COVER */}
+                  <div className="relative w-full aspect-[16/9] md:aspect-auto md:h-[520px] lg:h-[560px] bg-black">
+                    <img
+                      src={v.cover}
+                      alt={v.title}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      loading="lazy"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                   </div>
 
                   {/* overlay text */}
                   <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                     <div className="absolute left-6 right-6 bottom-6">
                       <h3 className="text-white text-2xl md:text-3xl font-extrabold tracking-tight drop-shadow">
                         {v.title}
@@ -587,21 +548,15 @@ function VideoCarouselSection({ videos = [] }) {
                     </div>
                   </div>
 
-                  {/* Play button */}
-                  {playingId !== v.id && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handlePlayClick(v.id); }}
-                      className="absolute inset-0 grid place-items-center"
-                      aria-label={`Play ${v.title}`}
-                    >
-                      <span className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 backdrop-blur grid place-items-center shadow hover:scale-105 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </span>
-                    </button>
-                  )}
-                </article>
+                  {/* play badge */}
+                  <div className="absolute inset-0 grid place-items-center">
+                    <span className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 backdrop-blur grid place-items-center shadow transition group-hover:scale-105">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
               ))}
             </div>
           </div>
@@ -623,6 +578,7 @@ function VideoCarouselSection({ videos = [] }) {
     </section>
   );
 }
+
 
 /* ====== PROJECT BANNER (vertical, same size as video, with reveal) ====== */
 function ProjectBanner({ p }) {
@@ -725,7 +681,8 @@ function AboutShowcase() {
               </span>
               <div className="mt-4 flex items-center gap-3 text-sm">
   <span className="text-slate-400/90 font-medium">Location</span>
-  <div className="h-px flex-1 bg-slate-200/70 dark:bg-white/10" />
+  <div className="h-[2px] flex-1 border-t border-dashed border-slate-300/80 dark:border-white/20" />
+
   <span
   className="inline-flex items-center gap-2 px-3 py-1 rounded-full
              bg-slate-900/5 dark:bg-white/10 ring-1 ring-slate-200/70 dark:ring-white/10
