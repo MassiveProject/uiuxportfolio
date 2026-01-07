@@ -357,27 +357,38 @@ export default function Portfolio() {
       {/* Projects (VERTICAL BANNERS + REVEAL) */}
       <section id="projects" className="scroll-mt-24 py-12 md:py-20 bg-slate-50 dark:bg-slate-900/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h2 className="text-2xl md:text-3xl font-bold">Selected Projects</h2>
-            <div className="flex gap-2 overflow-x-auto no-scrollbar">
-              {[
-                { k: "all", label: "All" },
-                { k: "web", label: "Web" },
-                { k: "ui", label: "UI" },
-              ].map((f) => (
-                <button
-                  key={f.k}
-                  onClick={() => setFilter(f.k)}
-                  className={cx(
-                    "px-3 py-1 text-sm rounded-full border shrink-0",
-                    filter === f.k ? "bg-indigo-600 text-white border-indigo-600" : "border-slate-300 dark:border-slate-700"
-                  )}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+  {/* LEFT: title + subheading (stack) */}
+  <div className="min-w-0">
+    <h2 className="text-2xl md:text-3xl font-bold">Digital Products</h2>
+    <p className="mt-2 text-slate-600 dark:text-slate-300 max-w-none">
+      Mobile and web projects I build to deliver clear, intuitive user experiences.
+    </p>
+  </div>
+
+  {/* RIGHT: filters */}
+  <div className="flex gap-2 overflow-x-auto no-scrollbar">
+    {[
+      { k: "all", label: "All" },
+      { k: "web", label: "Web" },
+      { k: "ui", label: "UI" },
+    ].map((f) => (
+      <button
+        key={f.k}
+        onClick={() => setFilter(f.k)}
+        className={cx(
+          "px-3 py-1 text-sm rounded-full border shrink-0",
+          filter === f.k
+            ? "bg-indigo-600 text-white border-indigo-600"
+            : "border-slate-300 dark:border-slate-700"
+        )}
+      >
+        {f.label}
+      </button>
+    ))}
+  </div>
+</div>
+
 
           {/* stack vertikal setara video banner */}
           <div className="mt-8 space-y-8 md:space-y-10">
@@ -483,7 +494,7 @@ function VideoCarouselSection({ videos = [] }) {
         <div className="mb-6 md:mb-8">
           <h2 className="text-2xl md:text-3xl font-bold">Product Videos</h2>
           <p className="mt-2 text-slate-600 dark:text-slate-300 whitespace-nowrap">
-            A selection of product videos I created—built to showcase features, spark engagement, and drive conversion.
+            A selection of product videos I created to showcase features, spark engagement, and drive conversion.
           </p>
         </div>
 
