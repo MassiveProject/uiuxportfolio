@@ -93,6 +93,14 @@ const VIDEOS = [
   },
 ];
 
+/* ====== 3D MOCKUP SHOWCASE ====== */
+const MOCKUP_WORKS = [
+  { id: 1, title: "Flashklik Business Card", cover: "/bisniscard.png", type: "3D Mockup" },
+  { id: 2, title: "Flashklik Totebag", cover: "/flashkliktotebag.png", type: "3D Mockup" },
+  { id: 3, title: "Flashklik E-Toll", cover: "/etoll.png", type: "3D Mockup" },
+];
+
+
 
 /* ====== STACKS DATA ====== */
 const STACKS = [
@@ -412,6 +420,8 @@ export default function Portfolio() {
 
       {/* ===== VIDEO CAROUSEL ===== */}
       <VideoCarouselSection videos={VIDEOS} />
+      
+      <BestProjectsSection />
 
       {/* ===== ABOUT ===== */}
       <AboutShowcase />
@@ -867,3 +877,182 @@ function ContactSection({ location }) {
     </section>
   );
 }
+/* ====== MY BEST PROJECTS (MOCKUP GRID + LIGHTBOX) ====== */
+function BestProjectsSection() {
+  const [active, setActive] = useState(null); // item yang lagi dibuka di lightbox
+  const [zoom, setZoom] = useState(false);
+
+  // close modal on ESC
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") setActive(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // lock body scroll when modal open
+  useEffect(() => {
+    if (!active) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [active]);
+
+  const open = (item) => {
+    setActive(item);
+    setZoom(false);
+  };
+
+  const close = () => setActive(null);
+
+  return (
+    <section className="py-14 md:py-24 bg-black text-white">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="max-w-3xl">
+          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+            Digital Event Product
+          </h2>
+          <p className="mt-4 text-white/70 leading-relaxed">
+            A curated collection of 3D mockups and visual explorations — focused on
+            clarity, depth, and presentation.
+          </p>
+        </div>
+
+        {/* Grid */}
+        <div className="mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+          {MOCKUP_WORKS.map((item) => (
+            <MockupCard key={item.id} item={item} onOpen={() => open(item)} />
+          ))}
+        </div>
+      </div>
+
+      {/* LIGHTBOX MODAL */}
+      {active && (
+        <div
+          className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          onMouseDown={(e) => {
+            // klik di luar konten untuk close
+            if (e.target === e.currentTarget) close();
+          }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
+            <div className="w-full max-w-5xl">
+              {/* Top bar */}
+              <div className="mb-3 flex items-center justify-between">
+                <div className="min-w-0">
+                  <p className="text-xs uppercase tracking-wider text-white/60">
+                    {active.type || "3D Mockup"}
+                  </p>
+                  <p className="text-lg font-semibold text-white truncate">
+                    {active.title}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setZoom((z) => !z)}
+                    className="h-10 px-4 rounded-full bg-white/10 hover:bg-white/15 ring-1 ring-white/15 text-sm font-semibold"
+                    aria-label="Toggle zoom"
+                  >
+                    {zoom ? "Fit" : "Zoom"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/15 ring-1 ring-white/15 grid place-items-center"
+                    aria-label="Close"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M18 6L6 18" />
+                      <path d="M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Image container */}
+              <div className="rounded-2xl overflow-hidden border border-white/10 bg-black shadow-[0_20px_80px_rgba(0,0,0,.6)]">
+                <div className="relative w-full">
+                  {/* area scroll kalau zoom */}
+                  <div
+                    className={[
+                      "w-full",
+                      zoom ? "max-h-[78vh] overflow-auto" : "max-h-[78vh] overflow-hidden",
+                    ].join(" ")}
+                  >
+                    <img
+                      src={active.cover}
+                      alt={active.title}
+                      className={[
+                        "block w-full",
+                        zoom ? "h-auto min-w-[1100px] object-contain" : "h-[78vh] object-contain",
+                      ].join(" ")}
+                      draggable="false"
+                    />
+                  </div>
+
+                  {/* hint */}
+                  <div className="absolute left-4 bottom-4 text-xs text-white/70 bg-black/35 backdrop-blur px-3 py-1.5 rounded-full ring-1 ring-white/10">
+                    Click outside to close • Press ESC
+                  </div>
+                </div>
+              </div>
+
+              {/* small helper (mobile) */}
+              <p className="mt-3 text-xs text-white/50">
+                Tip: Tap <span className="text-white/70 font-semibold">Zoom</span> to see details clearly.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function MockupCard({ item, onOpen }) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group text-left relative rounded-2xl overflow-hidden
+                 border border-white/10 bg-white/[0.04]
+                 shadow-[0_14px_50px_rgba(0,0,0,.45)]
+                 transition-transform duration-300 hover:-translate-y-1
+                 focus:outline-none focus:ring-2 focus:ring-white/30"
+      aria-label={`Open ${item.title}`}
+    >
+      <div className="relative w-full aspect-[16/10] overflow-hidden">
+        <img
+          src={item.cover}
+          alt={item.title}
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover
+                     transition-transform duration-700 group-hover:scale-[1.03]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+
+        <div className="absolute left-5 right-5 bottom-5">
+          <p className="text-[11px] uppercase tracking-wider text-white/65">
+            {item.type || "3D Mockup"}
+          </p>
+          <h3 className="mt-1 text-lg md:text-xl font-extrabold tracking-tight text-white">
+            {item.title}
+          </h3>
+        </div>
+      </div>
+
+      {/* subtle hover ring */}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/0 group-hover:ring-white/10 transition" />
+    </button>
+  );
+}
+
