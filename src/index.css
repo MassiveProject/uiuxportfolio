@@ -147,3 +147,5 @@
   font-family: "Special Elite", ui-monospace, "Courier New", monospace;
   letter-spacing: .3px; /* biar feel-nya makin typewriter */
 }
+
+html { scroll-behavior: smooth; }

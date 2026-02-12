@@ -95,9 +95,10 @@ const VIDEOS = [
 
 /* ====== 3D MOCKUP SHOWCASE ====== */
 const MOCKUP_WORKS = [
-  { id: 1, title: "Flashklik Business Card", cover: "/bisniscard.png", type: "3D Mockup" },
-  { id: 2, title: "Flashklik Totebag", cover: "/flashkliktotebag.png", type: "3D Mockup" },
-  { id: 3, title: "Flashklik E-Toll", cover: "/etoll.png", type: "3D Mockup" },
+  { id: 1, title: "Flashklik Business Card", cover: "/bisniscard.png", type: "Company Business Card" },
+  { id: 2, title: "Flashklik Totebag", cover: "/flashkliktotebag.png", type: "Flashklik in collaboration with HP" },
+  { id: 3, title: "Flashklik E-Toll", cover: "/etoll.png", type: "Flashklik in collaboration with HP" },
+  { id: 4, title: "Flashklik Tumblr", cover: "/flashkliktumblr.png", type: "Flashklik in collaboration with HP" },
 ];
 
 
@@ -118,7 +119,10 @@ function cx(...classes) {
 }
 
 /* ========= SPARKLE BUTTON ========= */
-function SparkleButton({ href = "#projects", children = "See Projects", className = "" }) {
+function SparkleButton({ href = "#projects",
+  children = "See Projects",
+  className = "",
+  newTab = false, }) {
   const stars = useMemo(
     () =>
       Array.from({ length: 16 }).map(() => ({
@@ -172,6 +176,8 @@ function SparkleButton({ href = "#projects", children = "See Projects", classNam
 
       <a
         href={href}
+        target={newTab ? "_blank" : undefined}
+  rel={newTab ? "noopener noreferrer" : undefined}
         className={[
           "sparkle-btn inline-flex items-center justify-center gap-3 rounded-lg px-4 py-2 font-semibold",
           "bg-indigo-600 text-white hover:bg-indigo-500",
@@ -283,6 +289,9 @@ export default function Portfolio() {
 
   const [openNav, setOpenNav] = useState(false);
 
+  const [openCV, setOpenCV] = useState(false);
+
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 pt-16 md:pt-24">
       {/* Header */}
@@ -343,9 +352,23 @@ export default function Portfolio() {
                 Junior UI/UX Designer skilled in Figma, user research, design systems, and hi-fi prototyping, crafting intuitive experiences that boost user satisfaction and business impact.
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <SparkleButton href="#projects">See Projects</SparkleButton>
-                <a href="https://drive.google.com/file/d/1NuAns-vA-CnPLlFEd6vpnsqWP4Xc_7KV/view?usp=sharing" className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:shadow w-full sm:w-auto text-center">Review CV</a>
-              </div>
+  {/* Sparkle button jadi Review CV */}
+  <SparkleButton href="/williamresume.pdf" newTab className="sm:w-auto">
+  Review CV
+</SparkleButton>
+
+
+  {/* Button kedua jadi LinkedIn */}
+  <a
+    href={PROFILE.socials.linkedin}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:shadow w-full sm:w-auto text-center"
+  >
+    LinkedIn
+  </a>
+</div>
+
             </div>
             <div className="relative flex justify-center lg:justify-end mt-8 lg:mt-0">
               <div className="relative before:content-[''] before:absolute before:-left-3 before:top-3 before:h-10 before:w-10 before:bg-slate-800/70 before:rounded-tr-2xl before:rounded-bl-2xl before:-z-10">
@@ -717,6 +740,7 @@ function AboutShowcase() {
 
 </div>
 
+
             </h2>
           </div>
 
@@ -878,9 +902,17 @@ function ContactSection({ location }) {
   );
 }
 /* ====== MY BEST PROJECTS (MOCKUP GRID + LIGHTBOX) ====== */
+/* ====== MY BEST PROJECTS (2 COL GRID + SEE MORE) ====== */
 function BestProjectsSection() {
   const [active, setActive] = useState(null); // item yang lagi dibuka di lightbox
   const [zoom, setZoom] = useState(false);
+
+  // ✅ See more state
+  const INITIAL_SHOW = 4;
+  const [showAll, setShowAll] = useState(false);
+
+  const items = MOCKUP_WORKS;
+  const visibleItems = showAll ? items : items.slice(0, INITIAL_SHOW);
 
   // close modal on ESC
   useEffect(() => {
@@ -901,11 +933,13 @@ function BestProjectsSection() {
     };
   }, [active]);
 
-  const open = (item) => {
-    setActive(item);
+  // reset zoom when change active
+  useEffect(() => {
+    if (!active) return;
     setZoom(false);
-  };
+  }, [active]);
 
+  const open = (item) => setActive(item);
   const close = () => setActive(null);
 
   return (
@@ -922,12 +956,25 @@ function BestProjectsSection() {
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {MOCKUP_WORKS.map((item) => (
+        {/* ✅ Grid: 2 kolom biar gambar lebih besar */}
+        <div className="mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+          {visibleItems.map((item) => (
             <MockupCard key={item.id} item={item} onOpen={() => open(item)} />
           ))}
         </div>
+
+        {/* ✅ See more kalau item > 4 */}
+        {items.length > INITIAL_SHOW && (
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              className="h-11 px-6 rounded-full bg-white/10 hover:bg-white/15 ring-1 ring-white/15 text-sm font-semibold"
+            >
+              {showAll ? "See less" : "See more"}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* LIGHTBOX MODAL */}
@@ -937,7 +984,6 @@ function BestProjectsSection() {
           role="dialog"
           aria-modal="true"
           onMouseDown={(e) => {
-            // klik di luar konten untuk close
             if (e.target === e.currentTarget) close();
           }}
         >
@@ -981,7 +1027,6 @@ function BestProjectsSection() {
               {/* Image container */}
               <div className="rounded-2xl overflow-hidden border border-white/10 bg-black shadow-[0_20px_80px_rgba(0,0,0,.6)]">
                 <div className="relative w-full">
-                  {/* area scroll kalau zoom */}
                   <div
                     className={[
                       "w-full",
@@ -999,14 +1044,12 @@ function BestProjectsSection() {
                     />
                   </div>
 
-                  {/* hint */}
                   <div className="absolute left-4 bottom-4 text-xs text-white/70 bg-black/35 backdrop-blur px-3 py-1.5 rounded-full ring-1 ring-white/10">
                     Click outside to close • Press ESC
                   </div>
                 </div>
               </div>
 
-              {/* small helper (mobile) */}
               <p className="mt-3 text-xs text-white/50">
                 Tip: Tap <span className="text-white/70 font-semibold">Zoom</span> to see details clearly.
               </p>
