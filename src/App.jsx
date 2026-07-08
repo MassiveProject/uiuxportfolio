@@ -17,6 +17,18 @@ const PROFILE = {
 /* ====== SAMPLE PROJECT DATA ====== */
 const PROJECTS = [
   {
+    id: 6,
+    title: "Freelance Hattatech",
+    description:
+      "Designed and developed Hattatech’s website experience with a clean, professional, and conversion-focused interface.",
+    cover: "/freelance-hattatech.png",
+    tags: ["Wordpress", "Figma"],
+    categories: ["web", "ui"],
+    link: "https://www.figma.com/proto/93znEzR4jcdctthvld9VGT/Hattatech-Social-Media?node-id=449-456&t=0vioqIsPAcNDKVGZ-0&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1",
+    repo: "#",
+    year: 2026,
+  },
+  {
     id: 1,
     title: "Flashklik Website",
     description: "Designed Flashklik’s website with conversion-driving features.",
@@ -27,6 +39,7 @@ const PROJECTS = [
     repo: "#",
     year: 2025,
   },
+  
   {
     id: 2,
     title: "Flashklik RoomFlow",
@@ -94,11 +107,38 @@ const VIDEOS = [
 ];
 
 /* ====== 3D MOCKUP SHOWCASE ====== */
+/* ====== 3D MOCKUP SHOWCASE ====== */
 const MOCKUP_WORKS = [
-  { id: 1, title: "Flashklik Business Card", cover: "/bisniscard.png", type: "Company Business Card" },
-  { id: 2, title: "Flashklik Totebag", cover: "/flashkliktotebag.png", type: "Flashklik in collaboration with HP" },
-  { id: 3, title: "Flashklik E-Toll", cover: "/etoll.png", type: "Flashklik in collaboration with HP" },
-  { id: 4, title: "Flashklik Tumblr", cover: "/flashkliktumblr.png", type: "Flashklik in collaboration with HP" },
+  {
+    id: 1,
+    title: "Flashklik Business Card",
+    cover: "/bisniscard.png",
+    type: "Company Business Card",
+  },
+  {
+    id: 2,
+    title: "Flashklik Totebag",
+    cover: "/flashkliktotebag.png",
+    type: "Flashklik in collaboration with HP",
+  },
+  {
+    id: 3,
+    title: "Flashklik E-Toll",
+    cover: "/etoll.png",
+    type: "Flashklik in collaboration with HP",
+  },
+  {
+    id: 4,
+    title: "Flashklik Tumblr",
+    cover: "/flashkliktumblr.png",
+    type: "Flashklik in collaboration with HP",
+  },
+  {
+    id: 5,
+    title: "Hattatech Catalogue 2026",
+    cover: "/catalog.png",
+    type: "Product Catalogue Design",
+  },
 ];
 
 
@@ -111,6 +151,8 @@ const STACKS = [
   { name: "Wordpress", role: "Website-builder Tool", logo: "/wordpresslogo.png" },
   { name: "Capcut", role: "Video editing Tool", logo: "/capcut.png" },
   { name: "Photoshop", role: "Graphic Design Tool", logo: "/ps.png" },
+  { name: "Adobe Illustrator", role: "Vector Design Tool", logo: "/illustrator.png" },
+  { name: "Adobe InDesign", role: "Layout Design Tool", logo: "/indesign.png" },
 ];
 
 /* ====== UTIL ====== */
@@ -262,9 +304,14 @@ function useScrollZoom() {
 export default function Portfolio() {
   const [filter, setFilter] = useState("all");
   const filtered = useMemo(
-    () => (filter === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === filter)),
-    [filter]
-  );
+  () =>
+    filter === "all"
+      ? PROJECTS
+      : PROJECTS.filter(
+          (p) => p.category === filter || p.categories?.includes(filter)
+        ),
+  [filter]
+);
 
   const [showAll, setShowAll] = useState(false);
   useEffect(() => setShowAll(false), [filter]);
@@ -289,7 +336,6 @@ export default function Portfolio() {
 
   const [openNav, setOpenNav] = useState(false);
 
-  const [openCV, setOpenCV] = useState(false);
 
 
   return (
@@ -349,7 +395,7 @@ export default function Portfolio() {
                 I'm <span className="text-indigo-600">{PROFILE.name}</span><br/>{PROFILE.headline}
               </h1>
               <p className="mt-4 text-slate-600 dark:text-slate-300 max-w-2xl">
-                Junior UI/UX Designer skilled in Figma, user research, design systems, and hi-fi prototyping, crafting intuitive experiences that boost user satisfaction and business impact.
+                UI/UX Designer with 5+ years of experience in Figma, user research, design systems, and hi-fi prototyping. I craft intuitive digital experiences while also supporting brand growth through social media marketing, catalog design, product packaging, and visual content across digital platforms.
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
   {/* Sparkle button jadi Review CV */}
@@ -855,16 +901,30 @@ function StackCard({ item }) {
 }
 
 function StacksSection() {
-  const left = STACKS.slice(0, 3);
-  const right = STACKS.slice(3, 6);
+  const middle = Math.ceil(STACKS.length / 2);
+  const left = STACKS.slice(0, middle);
+  const right = STACKS.slice(middle);
+
   return (
     <section id="stacks" className="scroll-mt-24 py-16 md:py-24 bg-slate-950">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-white">My Stacks</h2>
-        <p className="mt-4 text-slate-400 max-w-3xl">Commitment to staying updated with the latest design trends and techniques.</p>
+        <p className="mt-4 text-slate-400 max-w-3xl">
+          Commitment to staying updated with the latest design trends and techniques.
+        </p>
+
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="space-y-3">{left.map((s) => <StackCard key={s.name} item={s} />)}</div>
-          <div className="space-y-3">{right.map((s) => <StackCard key={s.name} item={s} />)}</div>
+          <div className="space-y-3">
+            {left.map((s) => (
+              <StackCard key={s.name} item={s} />
+            ))}
+          </div>
+
+          <div className="space-y-3">
+            {right.map((s) => (
+              <StackCard key={s.name} item={s} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
