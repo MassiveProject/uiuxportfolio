@@ -399,7 +399,7 @@ export default function Portfolio() {
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
   {/* Sparkle button jadi Review CV */}
-  <SparkleButton href="/williamresume.pdf" newTab className="sm:w-auto">
+  <SparkleButton href="/resume-william.pdf" newTab className="sm:w-auto">
   Review CV
 </SparkleButton>
 
