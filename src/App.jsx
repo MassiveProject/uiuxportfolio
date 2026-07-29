@@ -21,7 +21,7 @@ const PROJECTS = [
     title: "Freelance Hattatech",
     description:
       "Designed and developed Hattatech’s website experience with a clean, professional, and conversion-focused interface.",
-    cover: "/freelance-hattatech.png",
+    cover: "/hatta-bg.png",
     tags: ["Wordpress", "Figma"],
     categories: ["web", "ui"],
     link: "https://www.figma.com/proto/93znEzR4jcdctthvld9VGT/Hattatech-Social-Media?node-id=449-456&t=0vioqIsPAcNDKVGZ-0&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1",
