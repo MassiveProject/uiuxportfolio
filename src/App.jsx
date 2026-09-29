@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-
-
 /* =========================================================
 
    WILUX — playful portfolio redesign
@@ -13,8 +11,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
    soft floating motion, and chunky rounded cards.
 
    ========================================================= */
-
-
 
 const PROFILE = {
 
@@ -40,19 +36,17 @@ const PROFILE = {
 
 };
 
-
-
 const PROJECTS = [
 
   {
 
     id: 6,
 
-    title: "Freelance Hattatech",
+    title: "Hattatech",
 
     description:
 
-      "Designed and developed Hattatech’s website experience with a clean, professional, and conversion-focused interface.",
+      "Designed Hattatech’s website interface, marketing assets, and product visuals with a clean, professional, and conversion-driven approach.",
 
     cover: "/hatta-bg.png",
 
@@ -196,8 +190,6 @@ const PROJECTS = [
 
 ];
 
-
-
 const VIDEOS = [
 
   {
@@ -230,8 +222,6 @@ const VIDEOS = [
 
 ];
 
-
-
 const MOCKUP_WORKS = [
 
   { id: 1, title: "Flashklik Business Card", cover: "/bisniscard.png", type: "Company Business Card" },
@@ -245,8 +235,6 @@ const MOCKUP_WORKS = [
   { id: 5, title: "Hattatech Catalogue 2026", cover: "/catalog.png", type: "Product Catalogue Design" },
 
 ];
-
-
 
 const STACKS = [
 
@@ -268,21 +256,15 @@ const STACKS = [
 
 ];
 
-
-
 const SKILLS_1 = ["Website Design", "Mobile Design", "UI/UX", "React", "Design Systems", "User Research"];
 
 const SKILLS_2 = ["Communication", "Interaction Design", "Usability Testing", "Graphic Design", "Video Editing", "Creative Thinking"];
-
-
 
 function cx(...classes) {
 
   return classes.filter(Boolean).join(" ");
 
 }
-
-
 
 function ArrowUpRight({ className = "h-4 w-4" }) {
 
@@ -298,8 +280,6 @@ function ArrowUpRight({ className = "h-4 w-4" }) {
 
 }
 
-
-
 function ArrowRight({ className = "h-4 w-4" }) {
 
   return (
@@ -314,8 +294,6 @@ function ArrowRight({ className = "h-4 w-4" }) {
 
 }
 
-
-
 function PlayIcon() {
 
   return (
@@ -329,8 +307,6 @@ function PlayIcon() {
   );
 
 }
-
-
 
 function SectionKicker({ children, dark = false }) {
 
@@ -348,8 +324,6 @@ function SectionKicker({ children, dark = false }) {
 
 }
 
-
-
 function DoodleStar({ className = "" }) {
 
   return (
@@ -363,8 +337,6 @@ function DoodleStar({ className = "" }) {
   );
 
 }
-
-
 
 function DoodleArrow({ className = "" }) {
 
@@ -382,15 +354,11 @@ function DoodleArrow({ className = "" }) {
 
 }
 
-
-
 function WavyDivider({ flip = false, tone = "cream" }) {
 
   return <div className={cx("play-wave", `play-wave-${tone}`, flip && "play-wave-flip")} aria-hidden="true" />;
 
 }
-
-
 
 function Header({ openNav, setOpenNav }) {
 
@@ -406,8 +374,6 @@ function Header({ openNav, setOpenNav }) {
 
         </a>
 
-
-
         <nav className="play-nav hidden md:flex" aria-label="Primary navigation">
 
           <a href="#about">About</a>
@@ -418,15 +384,11 @@ function Header({ openNav, setOpenNav }) {
 
         </nav>
 
-
-
         <a href="#contact" className="play-pill-button play-pill-lime hidden sm:inline-flex">
 
           Let’s talk <ArrowUpRight />
 
         </a>
-
-
 
         <button className="play-menu-button md:hidden" onClick={() => setOpenNav((v) => !v)} aria-label="Toggle menu" aria-expanded={openNav}>
 
@@ -437,8 +399,6 @@ function Header({ openNav, setOpenNav }) {
         </button>
 
       </div>
-
-
 
       {openNav && (
 
@@ -462,13 +422,9 @@ function Header({ openNav, setOpenNav }) {
 
 }
 
-
-
 function Hero({ greetIndex }) {
 
   const greetings = ["Halo", "你好", "Hello", "Olá", "Hola"];
-
-
 
   return (
 
@@ -486,8 +442,6 @@ function Hero({ greetIndex }) {
 
       <DoodleArrow className="play-hero-arrow" />
 
-
-
       <div className="play-container play-hero-inner">
 
         <div className="play-hero-topline">
@@ -504,17 +458,19 @@ function Hero({ greetIndex }) {
 
         </div>
 
-
-
         <div className="play-hero-word" aria-hidden="true">
+
           {["W", "I", "L", "U", "X"].map((letter, index) => (
+
             <span className="play-hero-letter" key={`${letter}-${index}`}>
+
               {letter}
+
             </span>
+
           ))}
+
         </div>
-
-
 
         <div className="play-hero-grid">
 
@@ -528,8 +484,6 @@ function Hero({ greetIndex }) {
 
             </div>
 
-
-
             <h1>
 
               I’m <span className="play-marker">William Natan Lie</span>,<br />
@@ -538,15 +492,11 @@ function Hero({ greetIndex }) {
 
             </h1>
 
-
-
             <p className="play-hero-description">
 
               UI/UX Designer with 5+ years of experience in Figma, user research, design systems, and hi-fi prototyping. I craft intuitive digital experiences while also supporting brand growth through social media marketing, catalog design, product packaging, and visual content across digital platforms.
 
             </p>
-
-
 
             <div className="play-hero-actions">
 
@@ -565,8 +515,6 @@ function Hero({ greetIndex }) {
             </div>
 
           </div>
-
-
 
           <div className="play-hero-visual">
 
@@ -606,8 +554,6 @@ function Hero({ greetIndex }) {
 
 }
 
-
-
 function ProjectCard({ project, index }) {
 
   return (
@@ -628,8 +574,6 @@ function ProjectCard({ project, index }) {
 
         </div>
 
-
-
         <div className="play-project-image-wrap">
 
           <img src={project.cover} alt={project.title} loading="lazy" />
@@ -639,8 +583,6 @@ function ProjectCard({ project, index }) {
           <div className="play-open-bubble"><ArrowUpRight className="h-6 w-6" /></div>
 
         </div>
-
-
 
         <div className="play-project-copy">
 
@@ -663,8 +605,6 @@ function ProjectCard({ project, index }) {
   );
 
 }
-
-
 
 function ProjectsSection({ filter, setFilter, filtered, showAll, setShowAll }) {
 
@@ -702,8 +642,6 @@ function ProjectsSection({ filter, setFilter, filtered, showAll, setShowAll }) {
 
         </div>
 
-
-
         <div className="play-project-grid">
 
           {(showAll ? filtered : filtered.slice(0, 4)).map((project, index) => (
@@ -713,8 +651,6 @@ function ProjectsSection({ filter, setFilter, filtered, showAll, setShowAll }) {
           ))}
 
         </div>
-
-
 
         {filtered.length > 4 && (
 
@@ -738,39 +674,43 @@ function ProjectsSection({ filter, setFilter, filtered, showAll, setShowAll }) {
 
 }
 
-
-
 function VideoSection() {
-
   const trackRef = useRef(null);
-
   const [page, setPage] = useState(0);
 
-
+  const getMaxScroll = (el) => Math.max(0, el.scrollWidth - el.clientWidth);
 
   const go = (dir) => {
-
     const el = trackRef.current;
-
     if (!el) return;
 
-    el.scrollBy({ left: dir * el.clientWidth * 0.92, behavior: "smooth" });
+    const lastPage = Math.max(0, VIDEOS.length - 1);
+    const nextPage = Math.max(0, Math.min(lastPage, page + dir));
+    const maxScroll = getMaxScroll(el);
 
+    setPage(nextPage);
+
+    el.scrollTo({
+      left: lastPage === 0 ? 0 : (nextPage / lastPage) * maxScroll,
+      behavior: "smooth",
+    });
   };
-
-
 
   const handleScroll = () => {
-
     const el = trackRef.current;
-
     if (!el) return;
 
-    setPage(Math.round(el.scrollLeft / (el.clientWidth * 0.92)));
+    const lastPage = Math.max(0, VIDEOS.length - 1);
+    const maxScroll = getMaxScroll(el);
 
+    if (lastPage === 0 || maxScroll <= 1) {
+      setPage(0);
+      return;
+    }
+
+    const progress = Math.min(1, Math.max(0, el.scrollLeft / maxScroll));
+    setPage(Math.round(progress * lastPage));
   };
-
-
 
   return (
 
@@ -794,17 +734,13 @@ function VideoSection() {
 
         </div>
 
-
-
         <div className="play-video-controls">
 
-          <button onClick={() => go(-1)} aria-label="Previous video">←</button>
+          <button onClick={() => go(-1)} aria-label="Previous video" disabled={page === 0}>←</button>
 
-          <button onClick={() => go(1)} aria-label="Next video">→</button>
+          <button onClick={() => go(1)} aria-label="Next video" disabled={page === VIDEOS.length - 1}>→</button>
 
         </div>
-
-
 
         <div ref={trackRef} onScroll={handleScroll} className="play-video-track no-scrollbar">
 
@@ -836,11 +772,15 @@ function VideoSection() {
 
         </div>
 
-
-
         <div className="play-dots">
 
-          {VIDEOS.map((video, i) => <span key={video.id} className={cx(i === page && "is-active")} />)}
+          {VIDEOS.map((video, i) => (
+            <span
+              key={video.id}
+              className={cx(i === page && "is-active")}
+              aria-hidden="true"
+            />
+          ))}
 
         </div>
 
@@ -853,8 +793,6 @@ function VideoSection() {
   );
 
 }
-
-
 
 function MockupCard({ item, index, onOpen }) {
 
@@ -886,8 +824,6 @@ function MockupCard({ item, index, onOpen }) {
 
 }
 
-
-
 function BestProjectsSection() {
 
   const [active, setActive] = useState(null);
@@ -898,8 +834,6 @@ function BestProjectsSection() {
 
   const visibleItems = showAll ? MOCKUP_WORKS : MOCKUP_WORKS.slice(0, 4);
 
-
-
   useEffect(() => {
 
     const onKey = (e) => e.key === "Escape" && setActive(null);
@@ -909,8 +843,6 @@ function BestProjectsSection() {
     return () => window.removeEventListener("keydown", onKey);
 
   }, []);
-
-
 
   useEffect(() => {
 
@@ -925,8 +857,6 @@ function BestProjectsSection() {
     return () => { document.body.style.overflow = prev; };
 
   }, [active]);
-
-
 
   return (
 
@@ -948,8 +878,6 @@ function BestProjectsSection() {
 
         </div>
 
-
-
         <div className="play-mockup-grid">
 
           {visibleItems.map((item, index) => (
@@ -959,8 +887,6 @@ function BestProjectsSection() {
           ))}
 
         </div>
-
-
 
         {MOCKUP_WORKS.length > 4 && (
 
@@ -977,8 +903,6 @@ function BestProjectsSection() {
         )}
 
       </div>
-
-
 
       {active && (
 
@@ -1026,8 +950,6 @@ function BestProjectsSection() {
 
 }
 
-
-
 function AboutShowcase() {
 
   return (
@@ -1048,8 +970,6 @@ function AboutShowcase() {
 
           <p>Specialized in intuitive, efficient, and engaging product design with seamless functionality for measurable business results.</p>
 
-
-
           <div className="play-about-stats">
 
             <div><strong>5+</strong><span>Years crafting digital experiences</span></div>
@@ -1058,13 +978,9 @@ function AboutShowcase() {
 
           </div>
 
-
-
           <div className="play-location typewriter-font">⌖ Based in {PROFILE.location}</div>
 
         </div>
-
-
 
         <div className="play-about-visual">
 
@@ -1089,8 +1005,6 @@ function AboutShowcase() {
   );
 
 }
-
-
 
 function StackCard({ item, index }) {
 
@@ -1117,8 +1031,6 @@ function StackCard({ item, index }) {
   );
 
 }
-
-
 
 function StacksSection() {
 
@@ -1156,8 +1068,6 @@ function StacksSection() {
 
 }
 
-
-
 function TextBelt({ items, reverse = false }) {
 
   const row = [...items, ...items, ...items];
@@ -1181,8 +1091,6 @@ function TextBelt({ items, reverse = false }) {
   );
 
 }
-
-
 
 function SkillsSection() {
 
@@ -1212,8 +1120,6 @@ function SkillsSection() {
 
 }
 
-
-
 function ContactSection({ location }) {
 
   const WA_PHONE = "6281546845281";
@@ -1221,8 +1127,6 @@ function ContactSection({ location }) {
   const preset = "Hi William, I came from your portfolio and would like to discuss a project.";
 
   const waLink = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(preset)}`;
-
-
 
   return (
 
@@ -1260,8 +1164,6 @@ function ContactSection({ location }) {
 
 }
 
-
-
 function Footer() {
 
   return (
@@ -1296,112 +1198,171 @@ function Footer() {
 
 }
 
-
-
-
 function usePlayfulScrollReveal() {
+
   useEffect(() => {
+
     if (typeof window === "undefined" || typeof document === "undefined") {
+
       return undefined;
+
     }
 
     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     if (reduceMotion || !("IntersectionObserver" in window)) {
+
       return undefined;
+
     }
 
     const selector = [
+
       ".play-section-heading",
+
       ".play-project-card",
+
       ".play-video-controls",
+
       ".play-video-card",
+
       ".play-dots",
+
       ".play-mockup-card",
+
       ".play-center-action",
+
       ".play-about-copy",
+
       ".play-about-visual",
+
       ".play-stack-card",
+
       ".play-skills-heading",
+
       ".play-marquee",
+
       ".play-contact-card",
+
       ".play-footer-inner",
+
     ].join(",");
 
     const registered = new WeakSet();
 
     const observer = new IntersectionObserver(
+
       (entries) => {
+
         entries.forEach((entry) => {
+
           if (!entry.isIntersecting) return;
 
           const el = entry.target;
+
           el.classList.remove("play-reveal-pending");
 
           // Restart cleanly if a browser painted the pending state first.
+
           void el.offsetWidth;
 
           el.classList.add("play-scroll-reveal");
+
           observer.unobserve(el);
+
         });
+
       },
+
       {
+
         threshold: 0.12,
+
         rootMargin: "0px 0px -7% 0px",
+
       }
+
     );
 
     const register = (root = document) => {
+
       const nodes = [];
 
       if (root instanceof Element && root.matches(selector)) {
+
         nodes.push(root);
+
       }
 
       if (root.querySelectorAll) {
+
         nodes.push(...root.querySelectorAll(selector));
+
       }
 
       nodes.forEach((el, index) => {
+
         if (registered.has(el)) return;
+
         if (el.closest(".play-hero")) return;
 
         registered.add(el);
+
         el.classList.add("play-reveal-pending");
 
         // Small repeating stagger makes grids/cards feel more organic.
+
         el.style.setProperty("--reveal-delay", `${(index % 4) * 65}ms`);
+
         observer.observe(el);
+
       });
+
     };
 
     register(document);
 
     // Also catches cards added later by "See more", filters, etc.
+
     const mutationObserver = new MutationObserver((mutations) => {
+
       mutations.forEach((mutation) => {
+
         mutation.addedNodes.forEach((node) => {
+
           if (node instanceof Element) register(node);
+
         });
+
       });
+
     });
 
     const main = document.querySelector(".play-site main");
 
     if (main) {
+
       mutationObserver.observe(main, {
+
         childList: true,
+
         subtree: true,
+
       });
+
     }
 
     return () => {
-      observer.disconnect();
-      mutationObserver.disconnect();
-    };
-  }, []);
-}
 
+      observer.disconnect();
+
+      mutationObserver.disconnect();
+
+    };
+
+  }, []);
+
+}
 
 export default function Portfolio() {
 
@@ -1417,8 +1378,6 @@ export default function Portfolio() {
 
   usePlayfulScrollReveal();
 
-
-
   const filtered = useMemo(
 
     () => filter === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === filter || p.categories?.includes(filter)),
@@ -1427,11 +1386,7 @@ export default function Portfolio() {
 
   );
 
-
-
   useEffect(() => setShowAll(false), [filter]);
-
-
 
   useEffect(() => {
 
@@ -1440,8 +1395,6 @@ export default function Portfolio() {
     return () => clearInterval(id);
 
   }, []);
-
-
 
   useEffect(() => {
 
@@ -1454,8 +1407,6 @@ export default function Portfolio() {
     return () => window.removeEventListener("scroll", onScroll);
 
   }, []);
-
-
 
   return (
 
@@ -1484,8 +1435,6 @@ export default function Portfolio() {
       </main>
 
       <Footer />
-
-
 
       <button
 
