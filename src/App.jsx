@@ -1,1161 +1,1508 @@
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-/* ====== EDIT HERE: Your Profile ====== */
+
+
+/* =========================================================
+
+   WILUX — playful portfolio redesign
+
+   Visual direction inspired by colorful editorial/product sites:
+
+   oversized type, organic shapes, saturated accents, doodles,
+
+   soft floating motion, and chunky rounded cards.
+
+   ========================================================= */
+
+
+
 const PROFILE = {
+
   name: "William Lie",
+
   headline: "UI/UX Designer",
+
   location: "Jakarta, Indonesia",
+
   email: "natanlie94@gmail.com",
+
   socials: {
+
     instagram: "https://instagram.com/wnliee/",
+
     linkedin: "https://www.linkedin.com/in/williamnatanlie/",
+
     x: "https://x.com/natanlie94",
+
   },
+
   available: true,
+
 };
 
-/* ====== SAMPLE PROJECT DATA ====== */
+
+
 const PROJECTS = [
+
   {
+
     id: 6,
+
     title: "Freelance Hattatech",
+
     description:
+
       "Designed and developed Hattatech’s website experience with a clean, professional, and conversion-focused interface.",
+
     cover: "/hatta-bg.png",
+
     tags: ["Wordpress", "Figma"],
+
     categories: ["web", "ui"],
+
     link: "https://www.figma.com/proto/93znEzR4jcdctthvld9VGT/Hattatech-Social-Media?node-id=449-456&t=0vioqIsPAcNDKVGZ-0&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1",
+
     repo: "#",
+
     year: 2026,
+
+    tone: "lime",
+
   },
+
   {
+
     id: 1,
+
     title: "Flashklik Website",
+
     description: "Designed Flashklik’s website with conversion-driving features.",
-    cover: "/website.png",
+
+    cover: "/flashklikwebsite.png",
+
     tags: ["Wordpress"],
+
     category: "web",
+
     link: "https://flashklik.com/",
+
     repo: "#",
+
     year: 2025,
+
+    tone: "cyan",
+
   },
-  
+
   {
+
     id: 2,
+
     title: "Flashklik RoomFlow",
+
     description: "Designed RoomFlow for frictionless meeting-room booking.",
+
     cover: "/roomflow.png",
+
     tags: ["Figma"],
+
     category: "ui",
+
     link: "https://www.figma.com/proto/XlaC0eqsS8GLpxfHac37OC/RoomFlow-Portfolio?node-id=1-4&t=YtG9FoAeLIThNEX1-1&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1",
+
     repo: "#",
+
     year: 2025,
+
+    tone: "orange",
+
   },
+
   {
+
     id: 3,
+
     title: "Flashklik EasyPrint",
+
     description: "Designed EasyPrint into a smart pay-per-print experience.",
+
     cover: "/easyprint.png",
+
     tags: ["Figma"],
+
     category: "ui",
+
     link: "https://www.figma.com/proto/gzLIaI1uO0lHxU0K1tu3Zl/EasyPrint-Portfolio?node-id=1-2&p=f&t=w9YGCzNOxk9BRJLx-0&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1",
+
     repo: "#",
+
     year: 2025,
+
+    tone: "pink",
+
   },
+
   {
+
     id: 4,
+
     title: "Yakult Lady App",
+
     description:
+
       "Designed Yakult Lady mobile app to boost sales and empower seamless user experience.",
+
     cover: "/yakult.png",
+
     tags: ["Figma"],
+
     category: "ui",
+
     link: "https://www.figma.com/proto/giHztQNgedVOMqzK7EiAuI/Portfolio?node-id=1-3688&scaling=scale-down-width&content-scaling=fixed&t=jCPsm7R9t52fVKrO-1",
+
     repo: "#",
+
     year: 2023,
+
+    tone: "purple",
+
   },
+
   {
+
     id: 5,
+
     title: "Amartha's Gold Investment Feature",
+
     description:
+
       "Designed Amartha’s gold investment feature through gamification, driving SME growth and elevating investor interest.",
+
     cover: "/amartha.png",
+
     tags: ["Figma"],
+
     category: "ui",
+
     link: "https://www.figma.com/proto/giHztQNgedVOMqzK7EiAuI/Portfolio?node-id=1-42&t=Fd3LLnGrpjLlQ0cb-1&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1",
+
     repo: "#",
+
     year: 2022,
+
+    tone: "yellow",
+
   },
+
 ];
 
-/* ====== VIDEO DATA ====== */
+
+
 const VIDEOS = [
+
   {
+
     id: "v1",
+
     title: "Flashklik EasyPrint",
+
     desc: "Print Result",
-    cover: "/easyprintprintingresult.png", // taruh file cover di public/
+
+    cover: "/easyprintprintingresult.png",
+
     youtube: "https://youtu.be/dD6Pp5XqcPw?si=N_GNckvj7qHhZzdf",
+
   },
+
   {
+
     id: "v2",
+
     title: "Flashklik RoomFlow",
+
     desc: "Trusted by KEMENKES",
+
     cover: "/roomflowpoly.png",
+
     youtube: "https://youtu.be/w9uUPs3VhP4?si=jDzglejq7VJi8ohy",
+
   },
+
 ];
 
-/* ====== 3D MOCKUP SHOWCASE ====== */
-/* ====== 3D MOCKUP SHOWCASE ====== */
+
+
 const MOCKUP_WORKS = [
-  {
-    id: 1,
-    title: "Flashklik Business Card",
-    cover: "/bisniscard.png",
-    type: "Company Business Card",
-  },
-  {
-    id: 2,
-    title: "Flashklik Totebag",
-    cover: "/flashkliktotebag.png",
-    type: "Flashklik in collaboration with HP",
-  },
-  {
-    id: 3,
-    title: "Flashklik E-Toll",
-    cover: "/etoll.png",
-    type: "Flashklik in collaboration with HP",
-  },
-  {
-    id: 4,
-    title: "Flashklik Tumblr",
-    cover: "/flashkliktumblr.png",
-    type: "Flashklik in collaboration with HP",
-  },
-  {
-    id: 5,
-    title: "Hattatech Catalogue 2026",
-    cover: "/catalog.png",
-    type: "Product Catalogue Design",
-  },
+
+  { id: 1, title: "Flashklik Business Card", cover: "/bisniscard.png", type: "Company Business Card" },
+
+  { id: 2, title: "Flashklik Totebag", cover: "/flashkliktotebag.png", type: "Flashklik in collaboration with HP" },
+
+  { id: 3, title: "Flashklik E-Toll", cover: "/etoll.png", type: "Flashklik in collaboration with HP" },
+
+  { id: 4, title: "Flashklik Tumblr", cover: "/flashkliktumblr.png", type: "Flashklik in collaboration with HP" },
+
+  { id: 5, title: "Hattatech Catalogue 2026", cover: "/catalog.png", type: "Product Catalogue Design" },
+
 ];
 
 
 
-/* ====== STACKS DATA ====== */
 const STACKS = [
+
   { name: "Figma", role: "Interface Design Tool", logo: "/figmalogo.png" },
+
   { name: "VS Code", role: "Development Tool", logo: "/vscode.png" },
+
   { name: "Google Docs", role: "Copywriting Tool", logo: "/gdocs.png" },
+
   { name: "Wordpress", role: "Website-builder Tool", logo: "/wordpresslogo.png" },
+
   { name: "Capcut", role: "Video editing Tool", logo: "/capcut.png" },
+
   { name: "Photoshop", role: "Graphic Design Tool", logo: "/ps.png" },
+
   { name: "Adobe Illustrator", role: "Vector Design Tool", logo: "/illustrator.png" },
+
   { name: "Adobe InDesign", role: "Layout Design Tool", logo: "/indesign.png" },
+
 ];
 
-/* ====== UTIL ====== */
+
+
+const SKILLS_1 = ["Website Design", "Mobile Design", "UI/UX", "React", "Design Systems", "User Research"];
+
+const SKILLS_2 = ["Communication", "Interaction Design", "Usability Testing", "Graphic Design", "Video Editing", "Creative Thinking"];
+
+
+
 function cx(...classes) {
+
   return classes.filter(Boolean).join(" ");
+
 }
 
-/* ========= SPARKLE BUTTON ========= */
-function SparkleButton({ href = "#projects",
-  children = "See Projects",
-  className = "",
-  newTab = false, }) {
-  const stars = useMemo(
-    () =>
-      Array.from({ length: 16 }).map(() => ({
-        size: 6 + Math.random() * 8,
-        dx: (Math.random() * 140 - 70).toFixed(0),
-        dy: (Math.random() * 110 - 55).toFixed(0),
-        delay: (Math.random() * 1.6).toFixed(2),
-        duration: 1.6 + Math.random() * 0.8,
-        opacity: 0.75 + Math.random() * 0.25,
-      })),
-    []
-  );
+
+
+function ArrowUpRight({ className = "h-4 w-4" }) {
 
   return (
-    <>
-      <style>{`
-        .sparkle-btn{position:relative;overflow:visible;box-shadow:0 8px 22px rgba(0,0,0,.25);
-          transition:transform .15s ease, box-shadow .2s ease, background-color .2s ease;}
-        .sparkle-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(0,0,0,.32)}
-        .sparkle-field{pointer-events:none;position:absolute;inset:-6px}
-        .sparkle-star{position:absolute;left:50%;top:50%;width:var(--size);height:var(--size);
-          transform:translate(-50%,-50%) scale(.2);color:#fff;opacity:0;
-          filter:drop-shadow(0 0 6px rgba(255,255,255,.85));
-          animation:sparkle-fly var(--dur) linear infinite;animation-delay:var(--delay)}
-        .sparkle-star::after{content:"";position:absolute;inset:-6px;
-          background:radial-gradient(circle,rgba(255,255,255,.45),transparent 60%);
-          border-radius:50%;filter:blur(6px)}
-        @keyframes sparkle-fly{
-          0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0deg)}
-          10%{opacity:1}
-          100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1) rotate(180deg)}
-        }
 
-        /* --- Hide all WebKit media controls --- */
-        video::-webkit-media-controls,
-        video::-webkit-media-controls-enclosure,
-        video::-webkit-media-controls-panel,
-        video::-webkit-media-controls-play-button,
-        video::-webkit-media-controls-start-playback-button,
-        video::-webkit-media-controls-overlay-play-button,
-        video::-webkit-media-controls-timeline,
-        video::-webkit-media-controls-current-time-display,
-        video::-webkit-media-controls-time-remaining-display,
-        video::-webkit-media-controls-mute-button,
-        video::-webkit-media-controls-volume-slider,
-        video::-internal-media-controls-download-button {
-          display: none !important;
-          -webkit-appearance: none !important;
-        }
-      `}</style>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className} aria-hidden="true">
 
-      <a
-        href={href}
-        target={newTab ? "_blank" : undefined}
-  rel={newTab ? "noopener noreferrer" : undefined}
-        className={[
-          "sparkle-btn inline-flex items-center justify-center gap-3 rounded-lg px-4 py-2 font-semibold",
-          "bg-indigo-600 text-white hover:bg-indigo-500",
-          "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600",
-          "w-full sm:w-auto text-center",
-          className,
-        ].join(" ")}
-      >
-        {children}
-        <div className="sparkle-field">
-          {stars.map((s, i) => (
-            <span
-              key={i}
-              className="sparkle-star"
-              style={{
-                "--x": `${s.dx}px`,
-                "--y": `${s.dy}px`,
-                "--delay": `${s.delay}s`,
-                "--dur": `${s.duration}s`,
-                "--size": `${s.size}px`,
-                opacity: s.opacity,
-              }}
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 2l2.6 5.7 6.3.9-4.6 4.3 1.1 6.2L12 16.8 6.6 19l1.1-6.2L3 8.6l6.3-.9L12 2z" />
-              </svg>
+      <path d="M7 17 17 7M8 7h9v9" />
+
+    </svg>
+
+  );
+
+}
+
+
+
+function ArrowRight({ className = "h-4 w-4" }) {
+
+  return (
+
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className} aria-hidden="true">
+
+      <path d="M5 12h14M13 5l7 7-7 7" />
+
+    </svg>
+
+  );
+
+}
+
+
+
+function PlayIcon() {
+
+  return (
+
+    <svg viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 ml-1" aria-hidden="true">
+
+      <path d="M8 5v14l11-7z" />
+
+    </svg>
+
+  );
+
+}
+
+
+
+function SectionKicker({ children, dark = false }) {
+
+  return (
+
+    <div className={cx("play-kicker", dark && "play-kicker-dark")}>&#x20;
+
+      <span className="play-kicker-dot" />
+
+      {children}
+
+    </div>
+
+  );
+
+}
+
+
+
+function DoodleStar({ className = "" }) {
+
+  return (
+
+    <svg className={className} viewBox="0 0 120 120" fill="none" aria-hidden="true">
+
+      <path d="M60 4 69 43 105 21 78 52 118 60 78 68 105 99 69 77 60 116 51 77 15 99 42 68 2 60 42 52 15 21 51 43 60 4Z" fill="currentColor" />
+
+    </svg>
+
+  );
+
+}
+
+
+
+function DoodleArrow({ className = "" }) {
+
+  return (
+
+    <svg className={className} viewBox="0 0 170 110" fill="none" aria-hidden="true">
+
+      <path d="M7 84c31-31 63-46 111-42 16 2 31 9 42 21" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeDasharray="3 10" />
+
+      <path d="m146 44 14 19-23 4" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+
+    </svg>
+
+  );
+
+}
+
+
+
+function WavyDivider({ flip = false, tone = "cream" }) {
+
+  return <div className={cx("play-wave", `play-wave-${tone}`, flip && "play-wave-flip")} aria-hidden="true" />;
+
+}
+
+
+
+function Header({ openNav, setOpenNav }) {
+
+  return (
+
+    <header className="play-header">
+
+      <div className="play-container play-header-inner">
+
+        <a href="#top" className="play-logo" aria-label="WILUX home">
+
+          <img src="/wilux-logo.png" alt="WILUX logo" />
+
+        </a>
+
+
+
+        <nav className="play-nav hidden md:flex" aria-label="Primary navigation">
+
+          <a href="#about">About</a>
+
+          <a href="#projects">Projects</a>
+
+          <a href="#skills">Skills</a>
+
+        </nav>
+
+
+
+        <a href="#contact" className="play-pill-button play-pill-lime hidden sm:inline-flex">
+
+          Let’s talk <ArrowUpRight />
+
+        </a>
+
+
+
+        <button className="play-menu-button md:hidden" onClick={() => setOpenNav((v) => !v)} aria-label="Toggle menu" aria-expanded={openNav}>
+
+          <span />
+
+          <span />
+
+        </button>
+
+      </div>
+
+
+
+      {openNav && (
+
+        <div className="play-mobile-nav md:hidden">
+
+          <a href="#about" onClick={() => setOpenNav(false)}>About</a>
+
+          <a href="#projects" onClick={() => setOpenNav(false)}>Projects</a>
+
+          <a href="#skills" onClick={() => setOpenNav(false)}>Skills</a>
+
+          <a href="#contact" onClick={() => setOpenNav(false)}>Contact</a>
+
+        </div>
+
+      )}
+
+    </header>
+
+  );
+
+}
+
+
+
+function Hero({ greetIndex }) {
+
+  const greetings = ["Halo", "你好", "Hello", "Olá", "Hola"];
+
+
+
+  return (
+
+    <section id="top" className="play-hero">
+
+      <div className="play-noise" />
+
+      <div className="play-orb play-orb-a" />
+
+      <div className="play-orb play-orb-b" />
+
+      <DoodleStar className="play-star play-star-a" />
+
+      <DoodleStar className="play-star play-star-b" />
+
+      <DoodleArrow className="play-hero-arrow" />
+
+
+
+      <div className="play-container play-hero-inner">
+
+        <div className="play-hero-topline">
+
+          <div className="play-availability">
+
+            <span className="play-availability-dot" />
+
+            Available for freelance
+
+          </div>
+
+          <span className="play-mini-note typewriter-font">Jakarta • UI/UX • Visual</span>
+
+        </div>
+
+
+
+        <div className="play-hero-word" aria-hidden="true">
+          {["W", "I", "L", "U", "X"].map((letter, index) => (
+            <span className="play-hero-letter" key={`${letter}-${index}`}>
+              {letter}
             </span>
           ))}
         </div>
-      </a>
-    </>
+
+
+
+        <div className="play-hero-grid">
+
+          <div className="play-hero-copy">
+
+            <div className="play-greeting typewriter-font">
+
+              <span key={greetIndex} className="animate-fadeSlide inline-block">{greetings[greetIndex]},</span>
+
+              <span> nice to meet you!</span>
+
+            </div>
+
+
+
+            <h1>
+
+              I’m <span className="play-marker">William Natan Lie</span>,<br />
+
+              a UI/UX Designer who makes digital products feel <em>clear</em>, <em>useful</em> & <em>alive.</em>
+
+            </h1>
+
+
+
+            <p className="play-hero-description">
+
+              UI/UX Designer with 5+ years of experience in Figma, user research, design systems, and hi-fi prototyping. I craft intuitive digital experiences while also supporting brand growth through social media marketing, catalog design, product packaging, and visual content across digital platforms.
+
+            </p>
+
+
+
+            <div className="play-hero-actions">
+
+              <a href="/william-resume.pdf" target="_blank" rel="noopener noreferrer" className="play-pill-button play-pill-lime play-pill-large">
+
+                Review CV <ArrowUpRight />
+
+              </a>
+
+              <a href={PROFILE.socials.linkedin} target="_blank" rel="noopener noreferrer" className="play-pill-button play-pill-outline play-pill-large">
+
+                LinkedIn <ArrowUpRight />
+
+              </a>
+
+            </div>
+
+          </div>
+
+
+
+          <div className="play-hero-visual">
+
+            <div className="play-photo-sticker play-photo-sticker-one">PRODUCT<br />DESIGNER</div>
+
+            <div className="play-photo-sticker play-photo-sticker-two">5+ YEARS<br />EXPERIENCE</div>
+
+            <div className="play-photo-shell">
+
+              <div className="play-photo-blob">
+
+                <img src="/pp.png" alt="William Lie" />
+
+              </div>
+
+            </div>
+
+            <div className="play-floating-figma">
+
+              <img src="/figma.png" alt="" aria-hidden="true" />
+
+            </div>
+
+            <div className="play-scribble typewriter-font">designing with purpose ↗</div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <WavyDivider tone="cream" />
+
+    </section>
+
   );
+
 }
 
-/* ===== Scroll reveal helper ===== */
-function useInView(options = { root: null, rootMargin: "-10% 0px", threshold: 0.2 }) {
-  const [inView, setInView] = useState(false);
-  const ref = useMemo(() => ({ current: null }), []);
-  useEffect(() => {
-    if (!ref.current) return;
-    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), options);
-    io.observe(ref.current);
-    return () => io.disconnect();
-  }, [options, ref]);
-  return [ref, inView];
+
+
+function ProjectCard({ project, index }) {
+
+  return (
+
+    <article className={cx("play-project-card", `play-tone-${project.tone || "purple"}`, index % 2 ? "play-card-tilt-right" : "play-card-tilt-left")}>
+
+      <a href={project.link} target="_blank" rel="noopener noreferrer" className="play-project-link">
+
+        <div className="play-project-meta">
+
+          <div className="flex flex-wrap gap-2">
+
+            {project.tags?.map((tag) => <span key={tag}>{tag}</span>)}
+
+          </div>
+
+          <span className="play-year">{project.year}</span>
+
+        </div>
+
+
+
+        <div className="play-project-image-wrap">
+
+          <img src={project.cover} alt={project.title} loading="lazy" />
+
+          <div className="play-project-shine" />
+
+          <div className="play-open-bubble"><ArrowUpRight className="h-6 w-6" /></div>
+
+        </div>
+
+
+
+        <div className="play-project-copy">
+
+          <div>
+
+            <p className="typewriter-font play-project-number">0{index + 1} / SELECTED WORK</p>
+
+            <h3>{project.title}</h3>
+
+          </div>
+
+          <p>{project.description}</p>
+
+        </div>
+
+      </a>
+
+    </article>
+
+  );
+
 }
 
-function useScrollZoom() {
-  const ref = useRef(null);
-  const [p, setP] = useState(0); // 0..1, 1 saat elemen berada di tengah viewport
 
-  useEffect(() => {
-    const el = ref.current;
+
+function ProjectsSection({ filter, setFilter, filtered, showAll, setShowAll }) {
+
+  return (
+
+    <section id="projects" className="play-section play-projects-section">
+
+      <div className="play-container">
+
+        <div className="play-section-heading play-section-heading-split">
+
+          <div>
+
+            <SectionKicker>Selected work</SectionKicker>
+
+            <h2>Digital products,<br /><span className="play-underline">but make it fun.</span></h2>
+
+          </div>
+
+          <div className="play-section-sidecopy">
+
+            <p>Mobile and web projects I build to deliver clear, intuitive user experiences.</p>
+
+            <div className="play-filters">
+
+              {[{ k: "all", label: "All" }, { k: "web", label: "Web" }, { k: "ui", label: "UI" }].map((item) => (
+
+                <button key={item.k} onClick={() => setFilter(item.k)} className={cx(filter === item.k && "is-active")}>{item.label}</button>
+
+              ))}
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <div className="play-project-grid">
+
+          {(showAll ? filtered : filtered.slice(0, 4)).map((project, index) => (
+
+            <ProjectCard key={project.id} project={project} index={index} />
+
+          ))}
+
+        </div>
+
+
+
+        {filtered.length > 4 && (
+
+          <div className="play-center-action">
+
+            <button onClick={() => setShowAll((v) => !v)} className="play-pill-button play-pill-purple play-pill-large">
+
+              {showAll ? "See less" : "See more projects"} <ArrowRight />
+
+            </button>
+
+          </div>
+
+        )}
+
+      </div>
+
+    </section>
+
+  );
+
+}
+
+
+
+function VideoSection() {
+
+  const trackRef = useRef(null);
+
+  const [page, setPage] = useState(0);
+
+
+
+  const go = (dir) => {
+
+    const el = trackRef.current;
+
     if (!el) return;
 
-    const onScroll = () => {
-      const r = el.getBoundingClientRect();
-      const vh = window.innerHeight || document.documentElement.clientHeight;
+    el.scrollBy({ left: dir * el.clientWidth * 0.92, behavior: "smooth" });
 
-      // progress: 1 saat center elemen = center viewport, turun ke 0 saat jauh
-      const center = r.top + r.height / 2;
-      const progress = 1 - Math.min(Math.max(Math.abs(center - vh / 2) / (vh * 0.6), 0), 1);
+  };
 
-      setP(progress);
-      el.style.setProperty("--p", progress.toFixed(3)); // kalau mau dipakai via CSS var
-    };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
 
-  return [ref, p];
+  const handleScroll = () => {
+
+    const el = trackRef.current;
+
+    if (!el) return;
+
+    setPage(Math.round(el.scrollLeft / (el.clientWidth * 0.92)));
+
+  };
+
+
+
+  return (
+
+    <section className="play-video-section">
+
+      <WavyDivider flip tone="purple" />
+
+      <div className="play-container play-video-content">
+
+        <div className="play-section-heading play-section-heading-split play-heading-light">
+
+          <div>
+
+            <SectionKicker dark>Motion & story</SectionKicker>
+
+            <h2>Products are better<br />when they <span>move.</span></h2>
+
+          </div>
+
+          <p>A selection of product videos I created to showcase features, spark engagement, and drive conversion.</p>
+
+        </div>
+
+
+
+        <div className="play-video-controls">
+
+          <button onClick={() => go(-1)} aria-label="Previous video">←</button>
+
+          <button onClick={() => go(1)} aria-label="Next video">→</button>
+
+        </div>
+
+
+
+        <div ref={trackRef} onScroll={handleScroll} className="play-video-track no-scrollbar">
+
+          {VIDEOS.map((video, i) => (
+
+            <a key={video.id} href={video.youtube} target="_blank" rel="noopener noreferrer" className={cx("play-video-card", i % 2 ? "play-video-orange" : "play-video-cyan")}>
+
+              <div className="play-video-image">
+
+                <img src={video.cover} alt={video.title} loading="lazy" />
+
+                <div className="play-play-button"><PlayIcon /></div>
+
+              </div>
+
+              <div className="play-video-copy">
+
+                <span className="typewriter-font">0{i + 1} / VIDEO</span>
+
+                <h3>{video.title}</h3>
+
+                <p>{video.desc}</p>
+
+              </div>
+
+            </a>
+
+          ))}
+
+        </div>
+
+
+
+        <div className="play-dots">
+
+          {VIDEOS.map((video, i) => <span key={video.id} className={cx(i === page && "is-active")} />)}
+
+        </div>
+
+      </div>
+
+      <WavyDivider tone="cream" />
+
+    </section>
+
+  );
+
 }
 
 
-/* ====== MAIN COMPONENT ====== */
-export default function Portfolio() {
-  const [filter, setFilter] = useState("all");
-  const filtered = useMemo(
-  () =>
-    filter === "all"
-      ? PROJECTS
-      : PROJECTS.filter(
-          (p) => p.category === filter || p.categories?.includes(filter)
-        ),
-  [filter]
-);
+
+function MockupCard({ item, index, onOpen }) {
+
+  const tones = ["pink", "lime", "cyan", "orange", "purple"];
+
+  return (
+
+    <button type="button" onClick={onOpen} className={cx("play-mockup-card", `play-mockup-${tones[index % tones.length]}`)}>
+
+      <div className="play-mockup-image">
+
+        <img src={item.cover} alt={item.title} loading="lazy" />
+
+        <div className="play-open-bubble"><ArrowUpRight className="h-6 w-6" /></div>
+
+      </div>
+
+      <div className="play-mockup-copy">
+
+        <p className="typewriter-font">{item.type || "3D Mockup"}</p>
+
+        <h3>{item.title}</h3>
+
+      </div>
+
+    </button>
+
+  );
+
+}
+
+
+
+function BestProjectsSection() {
+
+  const [active, setActive] = useState(null);
+
+  const [zoom, setZoom] = useState(false);
 
   const [showAll, setShowAll] = useState(false);
-  useEffect(() => setShowAll(false), [filter]);
 
-  const GREETINGS = ["Halo", "你好", "Hello", "Olá", "Hola"];
-  const [greetIndex, setGreetIndex] = useState(0);
+  const visibleItems = showAll ? MOCKUP_WORKS : MOCKUP_WORKS.slice(0, 4);
+
+
+
   useEffect(() => {
-    const id = setInterval(() => setGreetIndex((i) => (i + 1) % GREETINGS.length), 800);
-    return () => clearInterval(id);
+
+    const onKey = (e) => e.key === "Escape" && setActive(null);
+
+    window.addEventListener("keydown", onKey);
+
+    return () => window.removeEventListener("keydown", onKey);
+
   }, []);
 
-  const [showTop, setShowTop] = useState(false);
+
+
   useEffect(() => {
-    const onScroll = () => setShowTop(window.scrollY > 400);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    if (!active) return undefined;
+
+    const prev = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    setZoom(false);
+
+    return () => { document.body.style.overflow = prev; };
+
+  }, [active]);
+
+
+
+  return (
+
+    <section className="play-section play-mockups-section">
+
+      <div className="play-container">
+
+        <div className="play-section-heading play-section-heading-split">
+
+          <div>
+
+            <SectionKicker>Visual explorations</SectionKicker>
+
+            <h2>Digital event<br /><span className="play-marker-dark">products.</span></h2>
+
+          </div>
+
+          <p>A curated collection of 3D mockups and visual explorations — focused on clarity, depth, and presentation.</p>
+
+        </div>
+
+
+
+        <div className="play-mockup-grid">
+
+          {visibleItems.map((item, index) => (
+
+            <MockupCard key={item.id} item={item} index={index} onOpen={() => setActive(item)} />
+
+          ))}
+
+        </div>
+
+
+
+        {MOCKUP_WORKS.length > 4 && (
+
+          <div className="play-center-action">
+
+            <button className="play-pill-button play-pill-white play-pill-large" onClick={() => setShowAll((v) => !v)}>
+
+              {showAll ? "See less" : "See more"} <ArrowRight />
+
+            </button>
+
+          </div>
+
+        )}
+
+      </div>
+
+
+
+      {active && (
+
+        <div className="play-lightbox" role="dialog" aria-modal="true" onMouseDown={(e) => e.target === e.currentTarget && setActive(null)}>
+
+          <div className="play-lightbox-card">
+
+            <div className="play-lightbox-top">
+
+              <div>
+
+                <p className="typewriter-font">{active.type || "3D Mockup"}</p>
+
+                <h3>{active.title}</h3>
+
+              </div>
+
+              <div className="flex gap-2">
+
+                <button onClick={() => setZoom((v) => !v)}>{zoom ? "Fit" : "Zoom"}</button>
+
+                <button onClick={() => setActive(null)} aria-label="Close">×</button>
+
+              </div>
+
+            </div>
+
+            <div className={cx("play-lightbox-image", zoom && "is-zoomed")}>
+
+              <img src={active.cover} alt={active.title} />
+
+            </div>
+
+            <p className="play-lightbox-tip typewriter-font">Click outside to close • Press ESC</p>
+
+          </div>
+
+        </div>
+
+      )}
+
+    </section>
+
+  );
+
+}
+
+
+
+function AboutShowcase() {
+
+  return (
+
+    <section id="about" className="play-about-section">
+
+      <div className="play-about-dots" />
+
+      <DoodleStar className="play-about-star" />
+
+      <div className="play-container play-about-grid">
+
+        <div className="play-about-copy">
+
+          <SectionKicker dark>About William</SectionKicker>
+
+          <h2>WEB & MOBILE<br /><span>DESIGN</span> EXPERT</h2>
+
+          <p>Specialized in intuitive, efficient, and engaging product design with seamless functionality for measurable business results.</p>
+
+
+
+          <div className="play-about-stats">
+
+            <div><strong>5+</strong><span>Years crafting digital experiences</span></div>
+
+            <div><strong>UI/UX</strong><span>Design, research & prototyping</span></div>
+
+          </div>
+
+
+
+          <div className="play-location typewriter-font">⌖ Based in {PROFILE.location}</div>
+
+        </div>
+
+
+
+        <div className="play-about-visual">
+
+          <div className="play-about-photo-frame">
+
+            <img src="/pp.png" alt="About William" />
+
+          </div>
+
+          <div className="play-about-note typewriter-font">I turn complex flows into simple moments ✦</div>
+
+          <DoodleArrow className="play-about-arrow" />
+
+        </div>
+
+      </div>
+
+      <WavyDivider tone="cream" />
+
+    </section>
+
+  );
+
+}
+
+
+
+function StackCard({ item, index }) {
+
+  const tones = ["lime", "cyan", "orange", "pink"];
+
+  return (
+
+    <div className={cx("play-stack-card", `play-stack-${tones[index % tones.length]}`)}>
+
+      <div className="play-stack-logo"><img src={item.logo} alt="" /></div>
+
+      <div>
+
+        <h3>{item.name}</h3>
+
+        <p className="typewriter-font">{item.role}</p>
+
+      </div>
+
+      <span>↗</span>
+
+    </div>
+
+  );
+
+}
+
+
+
+function StacksSection() {
+
+  return (
+
+    <section id="stacks" className="play-section play-stacks-section">
+
+      <div className="play-container">
+
+        <div className="play-section-heading play-section-heading-split">
+
+          <div>
+
+            <SectionKicker>My toolbox</SectionKicker>
+
+            <h2>Tools I use to<br /><span className="play-underline">make ideas real.</span></h2>
+
+          </div>
+
+          <p>Commitment to staying updated with the latest design trends and techniques.</p>
+
+        </div>
+
+        <div className="play-stack-grid">
+
+          {STACKS.map((item, index) => <StackCard key={item.name} item={item} index={index} />)}
+
+        </div>
+
+      </div>
+
+    </section>
+
+  );
+
+}
+
+
+
+function TextBelt({ items, reverse = false }) {
+
+  const row = [...items, ...items, ...items];
+
+  return (
+
+    <div className="play-marquee">
+
+      <div className="play-marquee-track" style={{ animationDirection: reverse ? "reverse" : "normal" }}>
+
+        {row.map((item, i) => (
+
+          <span key={`${item}-${i}`}>{item}<i>✦</i></span>
+
+        ))}
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+
+
+function SkillsSection() {
+
+  return (
+
+    <section id="skills" className="play-skills-section">
+
+      <div className="play-container play-skills-heading">
+
+        <SectionKicker dark>Skills & superpowers</SectionKicker>
+
+        <h2>Designing, thinking,<br />testing, <span>making.</span></h2>
+
+      </div>
+
+      <div className="mt-10 md:mt-14 space-y-4">
+
+        <TextBelt items={SKILLS_1} />
+
+        <TextBelt items={SKILLS_2} reverse />
+
+      </div>
+
+    </section>
+
+  );
+
+}
+
+
+
+function ContactSection({ location }) {
+
+  const WA_PHONE = "6281546845281";
+
+  const preset = "Hi William, I came from your portfolio and would like to discuss a project.";
+
+  const waLink = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(preset)}`;
+
+
+
+  return (
+
+    <section id="contact" className="play-contact-section">
+
+      <div className="play-container">
+
+        <div className="play-contact-card">
+
+          <DoodleStar className="play-contact-star" />
+
+          <div className="play-contact-face">:)</div>
+
+          <SectionKicker>Have a project?</SectionKicker>
+
+          <h2>Let’s make something<br /><span>people enjoy using.</span></h2>
+
+          <p>I help companies and businesses turn goals into measurable growth, design that lifts conversion, speeds adoption, and streamlines operations. Let’s talk about your website, product, or design needs.</p>
+
+          {location && <div className="play-contact-location typewriter-font">Based in {location}</div>}
+
+          <a href={waLink} target="_blank" rel="noopener noreferrer" className="play-pill-button play-pill-purple play-pill-huge">
+
+            Contact me on WhatsApp <ArrowUpRight className="h-6 w-6" />
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  );
+
+}
+
+
+
+function Footer() {
+
+  return (
+
+    <footer className="play-footer">
+
+      <div className="play-container play-footer-inner">
+
+        <div>
+
+          <img src="/wilux-logo.png" alt="WILUX" />
+
+          <p>© {new Date().getFullYear()} {PROFILE.name}. All rights reserved.</p>
+
+        </div>
+
+        <div className="play-footer-links">
+
+          <a href={PROFILE.socials.instagram} target="_blank" rel="noreferrer">Instagram ↗</a>
+
+          <a href={PROFILE.socials.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+
+          <a href={PROFILE.socials.x} target="_blank" rel="noreferrer">X ↗</a>
+
+        </div>
+
+      </div>
+
+    </footer>
+
+  );
+
+}
+
+
+
+
+function usePlayfulScrollReveal() {
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return undefined;
+    }
+
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      return undefined;
+    }
+
+    const selector = [
+      ".play-section-heading",
+      ".play-project-card",
+      ".play-video-controls",
+      ".play-video-card",
+      ".play-dots",
+      ".play-mockup-card",
+      ".play-center-action",
+      ".play-about-copy",
+      ".play-about-visual",
+      ".play-stack-card",
+      ".play-skills-heading",
+      ".play-marquee",
+      ".play-contact-card",
+      ".play-footer-inner",
+    ].join(",");
+
+    const registered = new WeakSet();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const el = entry.target;
+          el.classList.remove("play-reveal-pending");
+
+          // Restart cleanly if a browser painted the pending state first.
+          void el.offsetWidth;
+
+          el.classList.add("play-scroll-reveal");
+          observer.unobserve(el);
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -7% 0px",
+      }
+    );
+
+    const register = (root = document) => {
+      const nodes = [];
+
+      if (root instanceof Element && root.matches(selector)) {
+        nodes.push(root);
+      }
+
+      if (root.querySelectorAll) {
+        nodes.push(...root.querySelectorAll(selector));
+      }
+
+      nodes.forEach((el, index) => {
+        if (registered.has(el)) return;
+        if (el.closest(".play-hero")) return;
+
+        registered.add(el);
+        el.classList.add("play-reveal-pending");
+
+        // Small repeating stagger makes grids/cards feel more organic.
+        el.style.setProperty("--reveal-delay", `${(index % 4) * 65}ms`);
+        observer.observe(el);
+      });
+    };
+
+    register(document);
+
+    // Also catches cards added later by "See more", filters, etc.
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node instanceof Element) register(node);
+        });
+      });
+    });
+
+    const main = document.querySelector(".play-site main");
+
+    if (main) {
+      mutationObserver.observe(main, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
   }, []);
-  function handleBackToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+}
+
+
+export default function Portfolio() {
+
+  const [filter, setFilter] = useState("all");
+
+  const [showAll, setShowAll] = useState(false);
 
   const [openNav, setOpenNav] = useState(false);
 
+  const [showTop, setShowTop] = useState(false);
+
+  const [greetIndex, setGreetIndex] = useState(0);
+
+  usePlayfulScrollReveal();
 
 
-  return (
-    <div className="min-h-screen overflow-x-hidden bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 pt-16 md:pt-24">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-slate-950/70 border-b border-slate-200/60 dark:border-slate-800/60">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-24">
-            <a href="#" className="flex items-center gap-3">
-              <img src="/wilux-logo.png" alt="WILUX logo" className="h-10 md:h-12 w-auto object-contain select-none" width={160} height={48} />
-              <span className="sr-only">WILUX Portfolio</span>
-            </a>
-            <nav className="hidden md:flex gap-8 text-sm">
-              <a className="hover:underline" href="#about">About</a>
-              <a className="hover:underline" href="#projects">Projects</a>
-              <a className="hover:underline" href="#skills">Skills</a>
-            </nav>
-            <div className="hidden sm:flex items-center gap-2">
-              <a href="#contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-500">Contact</a>
-            </div>
-            <button
-              className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-lg hover:bg-slate-200/40 dark:hover:bg-slate-800/60"
-              onClick={() => setOpenNav((v) => !v)}
-              aria-label="Toggle menu"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
-          </div>
-          {openNav && (
-            <div className="md:hidden pb-4">
-              <div className="mt-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur p-2">
-                <a href="#about" className="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">About</a>
-                <a href="#projects" className="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Projects</a>
-                <a href="#skills" className="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Skills</a>
-                <a href="#contact" className="block px-3 py-2 rounded-lg bg-indigo-600 text-white mt-1">Contact</a>
-              </div>
-            </div>
-          )}
-        </div>
-      </header>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-50 to-white dark:from-indigo-950/20 dark:to-slate-950"></div>
-        <SingleIcon src="/figma.png" size={220} left="14%" top="58%" opacity={0.16} rotate={-4} dur="16s" delay="-2s" />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-10 items-center">
-            <div>
-              <span className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-emerald-600/10 text-emerald-700 dark:text-emerald-300 border border-emerald-600/20">
-                <span className="inline-block h-2 w-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                Available for freelance
-              </span>
-              <h1 className="mt-3 text-[clamp(28px,6vw,40px)] md:text-5xl font-extrabold tracking-tight leading-[1.2] md:leading-[1.1]">
-                <span className="relative inline-block h-[1em] overflow-hidden align-baseline">
-                  <span key={greetIndex} className="block animate-fadeSlide">{["Halo","你好","Hello","Olá","Hola"][greetIndex]},</span>
-                </span>{" "}
-                I'm <span className="text-indigo-600">{PROFILE.name}</span><br/>{PROFILE.headline}
-              </h1>
-              <p className="mt-4 text-slate-600 dark:text-slate-300 max-w-2xl">
-                UI/UX Designer with 5+ years of experience in Figma, user research, design systems, and hi-fi prototyping. I craft intuitive digital experiences while also supporting brand growth through social media marketing, catalog design, product packaging, and visual content across digital platforms.
-              </p>
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
-  {/* Sparkle button jadi Review CV */}
-  <SparkleButton href="/william-resume.pdf" newTab className="sm:w-auto">
-  Review CV
-</SparkleButton>
+  const filtered = useMemo(
 
+    () => filter === "all" ? PROJECTS : PROJECTS.filter((p) => p.category === filter || p.categories?.includes(filter)),
 
-  {/* Button kedua jadi LinkedIn */}
-  <a
-    href={PROFILE.socials.linkedin}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:shadow w-full sm:w-auto text-center"
-  >
-    LinkedIn
-  </a>
-</div>
+    [filter]
 
-            </div>
-            <div className="relative flex justify-center lg:justify-end mt-8 lg:mt-0">
-              <div className="relative before:content-[''] before:absolute before:-left-3 before:top-3 before:h-10 before:w-10 before:bg-slate-800/70 before:rounded-tr-2xl before:rounded-bl-2xl before:-z-10">
-                <div className="h-[260px] w-[260px] sm:h-[300px] sm:w-[300px] md:h-[360px] md:w-[360px] lg:h-[380px] lg:w-[380px] rounded-full overflow-hidden ring-[8px] md:ring-[10px] ring-slate-900/60 dark:ring-slate-800/70 bg-slate-900/30">
-                  <img src="/pp.png" alt="Profile" className="h-full w-full object-cover object-[50%_22%] md:object-[50%_32%]" />
-                </div>
-              </div>
-              <div className="absolute -bottom-2 right-0 hidden md:block bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl px-4 py-3 shadow">
-                <p className="text-xs text-slate-600 dark:text-slate-400">✨ 4+ years building UI</p>
-                <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">Figma, Visual Design, React</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects (VERTICAL BANNERS + REVEAL) */}
-      <section id="projects" className="scroll-mt-24 py-12 md:py-20 bg-slate-50 dark:bg-slate-900/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-  {/* LEFT: title + subheading (stack) */}
-  <div className="min-w-0">
-    <h2 className="text-2xl md:text-3xl font-bold">Digital Products</h2>
-    <p className="mt-2 text-slate-600 dark:text-slate-300 max-w-none">
-      Mobile and web projects I build to deliver clear, intuitive user experiences.
-    </p>
-  </div>
-
-  {/* RIGHT: filters */}
-  <div className="flex gap-2 overflow-x-auto no-scrollbar">
-    {[
-      { k: "all", label: "All" },
-      { k: "web", label: "Web" },
-      { k: "ui", label: "UI" },
-    ].map((f) => (
-      <button
-        key={f.k}
-        onClick={() => setFilter(f.k)}
-        className={cx(
-          "px-3 py-1 text-sm rounded-full border shrink-0",
-          filter === f.k
-            ? "bg-indigo-600 text-white border-indigo-600"
-            : "border-slate-300 dark:border-slate-700"
-        )}
-      >
-        {f.label}
-      </button>
-    ))}
-  </div>
-</div>
-
-
-          {/* stack vertikal setara video banner */}
-          <div className="mt-8 space-y-8 md:space-y-10">
-            {(showAll ? filtered : filtered.slice(0, 3)).map((p, i) => (
-              <ProjectBanner key={p.id} p={p} index={i} />
-            ))}
-          </div>
-
-          {filtered.length > 3 && (
-            <div className="mt-8 flex justify-center">
-              <button
-                onClick={() => setShowAll((v) => !v)}
-                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 hover:shadow text-sm font-semibold"
-              >
-                {showAll ? "See less" : "See more"}
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ===== VIDEO CAROUSEL ===== */}
-      <VideoCarouselSection videos={VIDEOS} />
-      
-      <BestProjectsSection />
-
-      {/* ===== ABOUT ===== */}
-      <AboutShowcase />
-
-      {/* Stacks */}
-      <StacksSection />
-
-      {/* Skills */}
-      <section id="skills" className="relative scroll-mt-24 py-12 md:py-20 overflow-visible">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl md:text-3xl font-bold">Skills</h2>
-          <TextBelt items={["Website Design","Mobile Design","UI/UX","React","Design Systems","User Research"]} speed={24} emphasis="indigo" className="mt-6" />
-          <TextBelt items={["Communication","Interaction Design","Usability Testing","Graphic Design","Video Editing","Creative Thinking"]} speed={30} reverse emphasis="slate" className="mt-4" />
-        </div>
-        <div className="hidden sm:block">
-          <SingleIcon src="/react.png" size={240} left="12%" bottom="-40px" opacity={0.18} rotate={-3} dur="14s" delay="0s" />
-        </div>
-      </section>
-
-      {/* Contact */}
-      <ContactSection location={PROFILE.location} />
-
-      {/* Back to Top */}
-      <button
-        onClick={handleBackToTop}
-        aria-label="Back to top"
-        title="Back to top"
-        className={[
-          "fixed right-4 md:right-6",
-          "bottom-[max(1.5rem,env(safe-area-inset-bottom))]",
-          "h-11 w-11 rounded-full",
-          "bg-indigo-600 text-white shadow-lg",
-          "hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600",
-          "transition-opacity",
-          showTop ? "opacity-100" : "opacity-0 pointer-events-none",
-        ].join(" ")}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 15l7-7 7 7"/></svg>
-      </button>
-
-      {/* Footer */}
-      <footer className="py-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} {PROFILE.name}. All rights reserved.</p>
-          <div className="flex items-center gap-3">
-            <a href={PROFILE.socials.instagram} target="_blank" className="hover:text-slate-800 dark:hover:text-slate-200" rel="noreferrer">Instagram</a>
-            <span>•</span>
-            <a href={PROFILE.socials.x} target="_blank" className="hover:text-slate-800 dark:hover:text-slate-200" rel="noreferrer">X</a>
-          </div>
-        </div>
-      </footer>
-    </div>
   );
-}
-
-/* ====== VIDEO CAROUSEL (click-to-play, mobile friendly) ====== */
-function VideoCarouselSection({ videos = [] }) {
-  const trackRef = useRef(null);
-  const [page, setPage] = useState(0);
-
-  const perView = 1;
-  const pageCount = Math.max(1, Math.ceil(videos.length / perView));
-
-  const go = (dir) => {
-    const el = trackRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * el.clientWidth, behavior: "smooth" });
-  };
-
-  const onScroll = () => {
-    const el = trackRef.current;
-    if (!el) return;
-    const idx = Math.round(el.scrollLeft / el.clientWidth);
-    setPage(idx);
-  };
-
-  return (
-    <section className="scroll-mt-24 py-12 md:py-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 md:mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold">Product Videos</h2>
-          <p className="mt-2 text-slate-600 dark:text-slate-300 whitespace-nowrap">
-            A selection of product videos I created to showcase features, spark engagement, and drive conversion.
-          </p>
-        </div>
-
-        <div className="relative">
-          {/* arrows */}
-          <button
-            onClick={() => go(-1)}
-            aria-label="Previous videos"
-            className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 backdrop-blur items-center justify-center hover:shadow"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={() => go(1)}
-            aria-label="Next videos"
-            className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 backdrop-blur items-center justify-center hover:shadow"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-
-          {/* track */}
-          <div
-            ref={trackRef}
-            onScroll={onScroll}
-            className="overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory px-1 sm:px-0"
-            style={{ scrollSnapStop: "always" }}
-          >
-            <div className="grid grid-flow-col auto-cols-[100%] md:auto-cols-[96%] gap-6 md:gap-8">
-              {videos.map((v) => (
-                <a
-                  key={v.id}
-                  href={v.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative snap-start rounded-[32px] overflow-hidden border border-slate-200 dark:border-slate-800 bg-black group focus:outline-none"
-                  aria-label={`Open ${v.title} on YouTube`}
-                >
-                  {/* COVER */}
-                  <div className="relative w-full aspect-[16/9] md:aspect-auto md:h-[520px] lg:h-[560px] bg-black">
-                    <img
-                      src={v.cover}
-                      alt={v.title}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  </div>
-
-                  {/* overlay text */}
-                  <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute left-6 right-6 bottom-6">
-                      <h3 className="text-white text-2xl md:text-3xl font-extrabold tracking-tight drop-shadow">
-                        {v.title}
-                      </h3>
-                      <p className="mt-2 text-white/85 text-base md:text-lg drop-shadow">
-                        {v.desc}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* play badge */}
-                  <div className="absolute inset-0 grid place-items-center">
-                    <span className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 backdrop-blur grid place-items-center shadow transition group-hover:scale-105">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </span>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* dots */}
-          <div className="mt-5 flex items-center justify-center gap-2">
-            {Array.from({ length: pageCount }).map((_, i) => (
-              <span
-                key={i}
-                className={cx(
-                  "h-2.5 w-2.5 rounded-full transition-colors",
-                  i === page ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"
-                )}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 
-/* ====== PROJECT BANNER (vertical, same size as video, with reveal) ====== */
-function ProjectBanner({ p }) {
-  const [revealRef, inView] = useInView({ root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.15 });
-  const [zoomRef, progress] = useScrollZoom();
 
-  // scale dari 0.96 (saat jauh) ke 1.04 (saat di tengah). Silakan ubah range 0.96–1.04 sesuai selera
-  const scale = 0.96 + 0.08 * progress;
-
-  return (
-    <article
-      ref={(el) => {
-        revealRef.current = el;
-        zoomRef.current = el;
-      }}
-      className={[
-        "relative rounded-[32px] overflow-hidden border border-slate-200 dark:border-slate-800",
-        "bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-shadow",
-        "will-change-transform",
-      ].join(" ")}
-      style={{
-        opacity: inView ? 1 : 0,
-        transform: `translateY(${inView ? 0 : 24}px) scale(${scale.toFixed(3)})`,
-        transition:
-          "opacity 900ms cubic-bezier(.2,.65,.2,1), transform 600ms cubic-bezier(.2,.65,.2,1)",
-      }}
-    >
-      <a href={p.link} target="_blank" rel="noopener noreferrer" className="block focus:outline-none">
-        {/* ukuran sama seperti video: 16:9 di mobile, fixed height di md+ */}
-        <div className="relative w-full aspect-[16/9] md:aspect-auto md:h-[520px] lg:h-[560px]">
-          <img
-            src={p.cover}
-            alt={p.title}
-            className="absolute inset-0 h-full w-full object-cover"
-            loading="lazy"
-          />
-
-          {/* overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-          <div className="absolute left-6 right-6 bottom-6">
-            <div className="flex items-center gap-2 mb-2">
-              {p.tags?.map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-white/15 text-white ring-1 ring-white/20 backdrop-blur"
-                >
-                  {t}
-                </span>
-              ))}
-              <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-white/15 text-white ring-1 ring-white/20 backdrop-blur">
-                {p.year}
-              </span>
-            </div>
-            <h3 className="text-white text-2xl md:text-3xl font-extrabold tracking-tight drop-shadow">
-              {p.title}
-            </h3>
-            <p className="mt-2 text-white/85 text-base md:text-lg drop-shadow">
-              {p.description}
-            </p>
-          </div>
-        </div>
-      </a>
-    </article>
-  );
-}
+  useEffect(() => setShowAll(false), [filter]);
 
 
-/* ====== ABOUT (reveal + glass overlay) ====== */
-function AboutShowcase() {
-  const [imgRef, inView] = useInView();
 
-  return (
-    <section id="about" className="relative scroll-mt-24 py-16 md:py-24 bg-black text-slate-100 overflow-visible">
-      <div
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background: "linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px)",
-          backgroundSize: "120px 100%",
-          maskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)",
-        }}
-      />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          className="
-            grid grid-cols-12
-            gap-y-16 md:gap-y-10
-            gap-x-6 md:gap-x-16 lg:gap-x-24
-            items-start md:items-center
-            justify-items-center md:justify-items-start
-          "
-        >
-          <div className="col-span-12 md:col-span-7 relative z-20">
-            <h2 className="text-[clamp(30px,6vw,56px)] leading-[1.15] md:leading-[1.15] font-extrabold tracking-tight">
-              
-              <span className="text-slate-300">
-                <span className="text-white"> WEB </span> & <span className="text-white"> MOBILE </span>
-                <br className="hidden md:block" />
-                <span className="design-anim">DESIGN</span>
-                <span className="text-white"> EXPERT </span>
-              </span>
-              <div className="mt-4 flex items-center gap-3 text-sm">
-  <span className="text-slate-400/90 font-medium">Location</span>
-  <div className="h-[2px] flex-1 border-t border-dashed border-slate-300/80 dark:border-white/20" />
-
-  <span
-  className="inline-flex items-center gap-2 px-3 py-1 rounded-full
-             bg-slate-900/5 dark:bg-white/10 ring-1 ring-slate-200/70 dark:ring-white/10
-             text-slate-500 dark:text-slate-300 font-mono text-[12px] sm:text-[13px] tracking-tight">
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M12 21s-6-4.35-6-10a6 6 0 1 1 12 0c0 5.65-6 10-6 10z" />
-    <circle cx="12" cy="11" r="2" />
-  </svg>
-  {PROFILE.location}
-</span>
-
-</div>
-
-
-            </h2>
-          </div>
-
-          <div className="col-span-12 md:col-span-5">
-            <div className="relative overflow-visible max-w-[420px] mx-auto md:mx-0 md:-ml-12 lg:-ml-20 -mt-4 md:-mt-8 z-10 pb-8 md:pb-0">
-              <div
-                ref={(el) => (imgRef.current = el)}
-                className={[
-                  "relative rounded-full overflow-hidden ring-1 ring-white/10 bg-white/5",
-                  "h-[260px] w-[260px] sm:h-[320px] sm:w-[320px] md:h-[420px] md:w-[420px]",
-                  "transition-all duration-[900ms] ease-[cubic-bezier(.2,.65,.2,1)] will-change-transform",
-                  inView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-[1.03]",
-                ].join(" ")}
-              >
-                <img src="/pp.png" alt="About William" className="h-full w-full object-cover object-[50%_22%] md:object-[50%_28%] filter grayscale" />
-                <div
-                  className="pointer-events-none absolute inset-0 mix-blend-overlay"
-                  style={{
-                    opacity: 0.35,
-                    backgroundImage:
-                      "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.5'/></svg>\")",
-                    backgroundSize: "160px 160px",
-                  }}
-                />
-              </div>
-              <div className="absolute left-3 right-3 -bottom-6 sm:left-4 sm:right-4 sm:-bottom-8 md:left-6 md:right-6 md:-bottom-10 z-20">
-                <div className="backdrop-blur-xl backdrop-saturate-150 bg-black/55 text-white rounded-2xl ring-1 ring-white/20 p-3 sm:p-4 md:p-5 shadow-[0_12px_36px_rgba(0,0,0,.55)]">
-                  <p className="text-[13px] sm:text-sm md:text-base leading-relaxed drop-shadow-[0_1px_1px_rgba(0,0,0,.6)]">
-                    Specialized in intuitive, efficient, and engaging product design with seamless functionality for measurable business results.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* end col */}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ====== SMALL COMPONENTS, STACKS & CONTACT ====== */
-function TextBelt({ items = ["Website Design","Mobile Design","UI/UX","Prototyping","Design Systems"], speed = 22, reverse = false, emphasis = "indigo", className = "" }) {
-  const row = [...items, ...items, ...items];
-  const color = emphasis === "indigo" ? "text-indigo-400 dark:text-indigo-300" : "text-slate-500 dark:text-slate-400";
-  return (
-    <div className={`relative overflow-hidden rounded-2xl border border-slate-200/70 dark:border-slate-800/70 bg-white/50 dark:bg-white/5 backdrop-blur skill-belt-mask ${className}`}>
-      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500/0 via-indigo-500/5 to-indigo-500/0" />
-      <div
-        className="skill-belt-track flex gap-8 sm:gap-10 whitespace-nowrap px-4 sm:px-6 py-3"
-        style={{ ["--speed"]: `${speed}s`, animationDirection: reverse ? "reverse" : "normal" }}
-      >
-        {row.map((t, i) => (
-          <span key={i} className={`inline-flex items-center gap-3 font-extrabold tracking-tight text-xl sm:text-2xl md:text-4xl ${color}`}>
-            <span className="h-2 w-2 rounded-full bg-current/70 shadow-[0_0_18px_currentColor]" />
-            {t}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SingleIcon({ src, size = 160, left, top, bottom, right, opacity = 0.22, rotate = 0, delay = "0s", dur = "12s" }) {
-  return (
-    <img
-      src={src}
-      alt=""
-      aria-hidden="true"
-      className="bg-icon hidden sm:block"
-      style={{
-        position: "absolute",
-        width: size,
-        height: size,
-        left,
-        top,
-        right,
-        bottom,
-        opacity,
-        transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
-        ["--dur"]: dur,
-        ["--delay"]: delay,
-        pointerEvents: "none",
-      }}
-    />
-  );
-}
-
-function StackCard({ item }) {
-  const fallback = (item?.name || "?")
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-  return (
-    <a
-      href={item.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-xl border border-slate-200/10 bg-slate-900/50 px-4 py-3 hover:bg-slate-900/70 transition-colors dark:border-slate-800/50 w-full"
-    >
-      <div className="h-10 w-10 grid place-items-center rounded-lg bg-slate-800/60 ring-1 ring-slate-700/60 overflow-hidden">
-        {item.logo ? <img src={item.logo} alt={item.name} className="h-6 w-6 object-contain" /> : <span className="text-[10px] font-bold text-slate-200">{fallback}</span>}
-      </div>
-      <div className="min-w-0">
-        <p className="font-semibold text-slate-100 leading-tight truncate text-[15px] md:text-base">{item.name}</p>
-        <p className="mt-[6px] font-mono text-[12px] text-slate-400/90 truncate tracking-tight">{item.role}</p>
-      </div>
-    </a>
-  );
-}
-
-function StacksSection() {
-  const middle = Math.ceil(STACKS.length / 2);
-  const left = STACKS.slice(0, middle);
-  const right = STACKS.slice(middle);
-
-  return (
-    <section id="stacks" className="scroll-mt-24 py-16 md:py-24 bg-slate-950">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-white">My Stacks</h2>
-        <p className="mt-4 text-slate-400 max-w-3xl">
-          Commitment to staying updated with the latest design trends and techniques.
-        </p>
-
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="space-y-3">
-            {left.map((s) => (
-              <StackCard key={s.name} item={s} />
-            ))}
-          </div>
-
-          <div className="space-y-3">
-            {right.map((s) => (
-              <StackCard key={s.name} item={s} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ContactSection({ location }) {
-  const WA_PHONE = "6281546845281";
-  const preset = "Hi William, I came from your portfolio and would like to discuss a project.";
-  const waLink = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(preset)}`;
-  return (
-    <section id="contact" className="scroll-mt-24 py-20 md:py-24 bg-slate-50 dark:bg-slate-900/40">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="mx-auto mb-6 h-12 w-12 rounded-lg grid place-items-center bg-slate-900/5 dark:bg-white/10">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-slate-700 dark:text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 11l9-7 9 7v8a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-4H10v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8z" /></svg>
-        </div>
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Get in Touch</h2>
-        <p className="mt-4 text-slate-600 dark:text-slate-300">
-          I help companies and businesses turn goals into measurable growth, design that lifts conversion, speeds adoption, and streamlines operations. Let’s talk about your website, product, or design needs.
-        </p>
-        {location && <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Based in {location}</p>}
-        <a
-          href={waLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-slate-900 text-white px-6 py-3 font-semibold hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 dark:bg-indigo-600 dark:hover:bg-indigo-500 w-full sm:w-auto"
-        >
-          Contact me on WhatsApp
-          <span className="inline-grid h-8 w-8 place-items-center rounded-full bg-white/10 ring-1 ring-white/20">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
-          </span>
-        </a>
-      </div>
-    </section>
-  );
-}
-/* ====== MY BEST PROJECTS (MOCKUP GRID + LIGHTBOX) ====== */
-/* ====== MY BEST PROJECTS (2 COL GRID + SEE MORE) ====== */
-function BestProjectsSection() {
-  const [active, setActive] = useState(null); // item yang lagi dibuka di lightbox
-  const [zoom, setZoom] = useState(false);
-
-  // ✅ See more state
-  const INITIAL_SHOW = 4;
-  const [showAll, setShowAll] = useState(false);
-
-  const items = MOCKUP_WORKS;
-  const visibleItems = showAll ? items : items.slice(0, INITIAL_SHOW);
-
-  // close modal on ESC
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape") setActive(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+
+    const id = setInterval(() => setGreetIndex((i) => (i + 1) % 5), 900);
+
+    return () => clearInterval(id);
+
   }, []);
 
-  // lock body scroll when modal open
-  useEffect(() => {
-    if (!active) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [active]);
 
-  // reset zoom when change active
-  useEffect(() => {
-    if (!active) return;
-    setZoom(false);
-  }, [active]);
 
-  const open = (item) => setActive(item);
-  const close = () => setActive(null);
+  useEffect(() => {
+
+    const onScroll = () => setShowTop(window.scrollY > 500);
+
+    onScroll();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+
+  }, []);
+
+
 
   return (
-    <section className="py-14 md:py-24 bg-black text-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="max-w-3xl">
-          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-            Digital Event Product
-          </h2>
-          <p className="mt-4 text-white/70 leading-relaxed">
-            A curated collection of 3D mockups and visual explorations — focused on
-            clarity, depth, and presentation.
-          </p>
-        </div>
 
-        {/* ✅ Grid: 2 kolom biar gambar lebih besar */}
-        <div className="mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
-          {visibleItems.map((item) => (
-            <MockupCard key={item.id} item={item} onOpen={() => open(item)} />
-          ))}
-        </div>
+    <div className="play-site">
 
-        {/* ✅ See more kalau item > 4 */}
-        {items.length > INITIAL_SHOW && (
-          <div className="mt-10 flex justify-center">
-            <button
-              type="button"
-              onClick={() => setShowAll((v) => !v)}
-              className="h-11 px-6 rounded-full bg-white/10 hover:bg-white/15 ring-1 ring-white/15 text-sm font-semibold"
-            >
-              {showAll ? "See less" : "See more"}
-            </button>
-          </div>
-        )}
-      </div>
+      <Header openNav={openNav} setOpenNav={setOpenNav} />
 
-      {/* LIGHTBOX MODAL */}
-      {active && (
-        <div
-          className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm"
-          role="dialog"
-          aria-modal="true"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) close();
-          }}
-        >
-          <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
-            <div className="w-full max-w-5xl">
-              {/* Top bar */}
-              <div className="mb-3 flex items-center justify-between">
-                <div className="min-w-0">
-                  <p className="text-xs uppercase tracking-wider text-white/60">
-                    {active.type || "3D Mockup"}
-                  </p>
-                  <p className="text-lg font-semibold text-white truncate">
-                    {active.title}
-                  </p>
-                </div>
+      <main>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setZoom((z) => !z)}
-                    className="h-10 px-4 rounded-full bg-white/10 hover:bg-white/15 ring-1 ring-white/15 text-sm font-semibold"
-                    aria-label="Toggle zoom"
-                  >
-                    {zoom ? "Fit" : "Zoom"}
-                  </button>
+        <Hero greetIndex={greetIndex} />
 
-                  <button
-                    type="button"
-                    onClick={close}
-                    className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/15 ring-1 ring-white/15 grid place-items-center"
-                    aria-label="Close"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M18 6L6 18" />
-                      <path d="M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
+        <ProjectsSection filter={filter} setFilter={setFilter} filtered={filtered} showAll={showAll} setShowAll={setShowAll} />
 
-              {/* Image container */}
-              <div className="rounded-2xl overflow-hidden border border-white/10 bg-black shadow-[0_20px_80px_rgba(0,0,0,.6)]">
-                <div className="relative w-full">
-                  <div
-                    className={[
-                      "w-full",
-                      zoom ? "max-h-[78vh] overflow-auto" : "max-h-[78vh] overflow-hidden",
-                    ].join(" ")}
-                  >
-                    <img
-                      src={active.cover}
-                      alt={active.title}
-                      className={[
-                        "block w-full",
-                        zoom ? "h-auto min-w-[1100px] object-contain" : "h-[78vh] object-contain",
-                      ].join(" ")}
-                      draggable="false"
-                    />
-                  </div>
+        <VideoSection />
 
-                  <div className="absolute left-4 bottom-4 text-xs text-white/70 bg-black/35 backdrop-blur px-3 py-1.5 rounded-full ring-1 ring-white/10">
-                    Click outside to close • Press ESC
-                  </div>
-                </div>
-              </div>
+        <BestProjectsSection />
 
-              <p className="mt-3 text-xs text-white/50">
-                Tip: Tap <span className="text-white/70 font-semibold">Zoom</span> to see details clearly.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+        <AboutShowcase />
+
+        <StacksSection />
+
+        <SkillsSection />
+
+        <ContactSection location={PROFILE.location} />
+
+      </main>
+
+      <Footer />
+
+
+
+      <button
+
+        className={cx("play-back-top", showTop && "is-visible")}
+
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+
+        aria-label="Back to top"
+
+      >
+
+        ↑
+
+      </button>
+
+    </div>
+
   );
+
 }
-
-function MockupCard({ item, onOpen }) {
-  return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="group text-left relative rounded-2xl overflow-hidden
-                 border border-white/10 bg-white/[0.04]
-                 shadow-[0_14px_50px_rgba(0,0,0,.45)]
-                 transition-transform duration-300 hover:-translate-y-1
-                 focus:outline-none focus:ring-2 focus:ring-white/30"
-      aria-label={`Open ${item.title}`}
-    >
-      <div className="relative w-full aspect-[16/10] overflow-hidden">
-        <img
-          src={item.cover}
-          alt={item.title}
-          loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover
-                     transition-transform duration-700 group-hover:scale-[1.03]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-
-        <div className="absolute left-5 right-5 bottom-5">
-          <p className="text-[11px] uppercase tracking-wider text-white/65">
-            {item.type || "3D Mockup"}
-          </p>
-          <h3 className="mt-1 text-lg md:text-xl font-extrabold tracking-tight text-white">
-            {item.title}
-          </h3>
-        </div>
-      </div>
-
-      {/* subtle hover ring */}
-      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/0 group-hover:ring-white/10 transition" />
-    </button>
-  );
-}
-
