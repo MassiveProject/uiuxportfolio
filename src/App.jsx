@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 /* =========================================================
 
-   WILUX — playful portfolio redesign
+   DESIGN BY WILLIE — playful portfolio redesign
 
    Visual direction inspired by colorful editorial/product sites:
 
@@ -368,9 +368,9 @@ function Header({ openNav, setOpenNav }) {
 
       <div className="play-container play-header-inner">
 
-        <a href="#top" className="play-logo" aria-label="WILUX home">
+        <a href="#top" className="play-logo" aria-label="Back to home">
 
-          <img src="/wilux-logo.png" alt="WILUX logo" />
+          <img src="/logo-blue.png" alt="Logo William Lie" />
 
         </a>
 
@@ -426,6 +426,28 @@ function Hero({ greetIndex }) {
 
   const greetings = ["Halo", "你好", "Hello", "Olá", "Hola"];
 
+  // Magnetic sticker: mouse moves the badge a few pixels, without React rerenders.
+  // The CSS animation handles the gentle floating loop independently.
+  const handleStickerPointerMove = (event) => {
+    if (event.pointerType !== "mouse") return;
+    const badge = event.currentTarget.querySelector(".willie-brand-sticker");
+    if (!badge) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - 0.5) * 2));
+    const y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - 0.5) * 2));
+    badge.style.setProperty("--magnetic-x", `${(x * 9).toFixed(1)}px`);
+    badge.style.setProperty("--magnetic-y", `${(y * 5).toFixed(1)}px`);
+    badge.style.setProperty("--magnetic-rotate", `${(x * 4).toFixed(1)}deg`);
+  };
+
+  const resetStickerPointer = (event) => {
+    const badge = event.currentTarget.querySelector(".willie-brand-sticker");
+    if (!badge) return;
+    ["--magnetic-x", "--magnetic-y", "--magnetic-rotate"].forEach((name) => {
+      badge.style.removeProperty(name);
+    });
+  };
+
   return (
 
     <section id="top" className="play-hero">
@@ -458,17 +480,35 @@ function Hero({ greetIndex }) {
 
         </div>
 
-        <div className="play-hero-word" aria-hidden="true">
+        <div className="willie-brand-stage" role="img" aria-label="DESIGN — design by willie">
 
-          {["W", "I", "L", "U", "X"].map((letter, index) => (
+          <div className="willie-brand-main" aria-hidden="true">
 
-            <span className="play-hero-letter" key={`${letter}-${index}`}>
+            {["D", "E", "S", "I", "G", "N"].map((letter, index) => (
 
-              {letter}
+              <span className="willie-brand-letter" key={`${letter}-${index}`}>
+                <span className="willie-brand-letter-inner">{letter}</span>
+              </span>
 
-            </span>
+            ))}
 
-          ))}
+          </div>
+
+          <div
+            className="willie-brand-sticker-shell"
+            aria-hidden="true"
+            onPointerMove={handleStickerPointerMove}
+            onPointerLeave={resetStickerPointer}
+            title="Move your mouse here!"
+          >
+            <div className="willie-brand-sticker">
+              <span className="willie-brand-sticker-star">✳</span>
+              <span>design by <strong>willie</strong></span>
+              <span className="willie-brand-sticker-star">✳</span>
+            </div>
+          </div>
+
+          <div className="willie-brand-caption" aria-hidden="true">where bold ideas come to life ↗</div>
 
         </div>
 
@@ -1174,7 +1214,11 @@ function Footer() {
 
         <div>
 
-          <img src="/wilux-logo.png" alt="WILUX" />
+          <a href="#top" className="willie-footer-logo" aria-label="Back to top — design by willie">
+
+            <span>design</span><small>by willie ✳</small>
+
+          </a>
 
           <p>© {new Date().getFullYear()} {PROFILE.name}. All rights reserved.</p>
 
@@ -1364,6 +1408,233 @@ function usePlayfulScrollReveal() {
 
 }
 
+function BrandStyles() {
+  return <style>{`/* DESIGN BY WILLIE — brand system for this exact React portfolio.
+   Self-contained: no changes needed to your existing CSS files. */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&display=swap');
+
+/* NAVBAR LOGO ONLY — visually enlarge the image, NOT its header/layout box.
+   Change 1.28 below if you want a slightly larger or smaller logo. */
+.play-site .play-header .play-logo {
+  position: relative;
+  overflow: visible;
+  flex-shrink: 0;
+}
+.play-site .play-header .play-logo img {
+  display: block;
+  transform: scale(1.28);
+  transform-origin: left center;
+  transition: transform 260ms ease;
+}
+@media (max-width: 768px) {
+  .play-site .play-header .play-logo img {
+    transform: scale(1.13);
+  }
+}
+
+
+/* The hero headline replaces the old WILUX wordmark. */
+.play-site .willie-brand-stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  margin: clamp(38px, 4.3vw, 82px) auto clamp(78px, 7.5vw, 140px);
+  padding: 0 3px clamp(26px, 2vw, 40px);
+  text-align: center;
+}
+.play-site .willie-brand-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  width: 100%;
+  color: #fffdfd;
+  font-family: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  font-size: clamp(58px, 19.2vw, 360px);
+  font-weight: 700;
+  line-height: .83;
+  letter-spacing: -.09em;
+  white-space: nowrap;
+  user-select: none;
+  filter: drop-shadow(0 8px 0 rgba(40, 16, 110, .10));
+}
+.play-site .willie-brand-letter {
+  position: relative;
+  display: inline-block;
+  flex: 0 1 auto;
+  transform-origin: 50% 75%;
+  animation: willie-letter-in .65s cubic-bezier(.2,1.35,.4,1) both;
+  animation-delay: calc(var(--willie-i, 0) * 75ms);
+}
+.play-site .willie-brand-letter:nth-child(1) { --willie-i: 0; transform: rotate(-6deg) translateY(5px); }
+.play-site .willie-brand-letter:nth-child(2) { --willie-i: 1; color: #fff; transform: rotate(5deg) translateY(-7px); }
+.play-site .willie-brand-letter:nth-child(3) { --willie-i: 2; transform: rotate(-7deg) translateY(7px); }
+.play-site .willie-brand-letter:nth-child(4) { --willie-i: 3; color: #baff59; transform: rotate(9deg) translateY(-9px); }
+.play-site .willie-brand-letter:nth-child(5) { --willie-i: 4; transform: rotate(-5deg) translateY(6px); }
+.play-site .willie-brand-letter:nth-child(6) { --willie-i: 5; transform: rotate(5deg) translateY(-4px); }
+/* The nested letters bob asynchronously forever; hover gives each letter a bounce. */
+.play-site .willie-brand-letter-inner {
+  display: inline-block;
+  animation: willie-letter-float 4s ease-in-out infinite;
+  animation-delay: calc(var(--willie-i, 0) * -460ms);
+  transition: transform .28s cubic-bezier(.2, 1.6, .35, 1), text-shadow .28s ease;
+  will-change: translate;
+}
+@media (hover: hover) and (pointer: fine) {
+  .play-site .willie-brand-letter:hover .willie-brand-letter-inner {
+    transform: translateY(-11px) rotate(-7deg) scale(1.09);
+    text-shadow: 3px 7px 0 rgba(29, 8, 95, .24);
+  }
+}
+@keyframes willie-letter-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+@keyframes willie-letter-in {
+  from { opacity: 0; scale: .74; translate: 0 22px; }
+  to   { opacity: 1; scale: 1; translate: 0 0; }
+}
+.play-site .willie-brand-sticker-shell {
+  position: absolute;
+  left: 50%;
+  bottom: -40px;
+  z-index: 2;
+  max-width: 92%;
+  transform: translateX(-50%) rotate(-3deg);
+  animation: willie-sticker-rise .8s .6s cubic-bezier(.2,1.35,.4,1) backwards;
+}
+.play-site .willie-brand-sticker {
+  --magnetic-x: 0px;
+  --magnetic-y: 0px;
+  --magnetic-rotate: 0deg;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.1vw, 17px);
+  max-width: 100%;
+  padding: clamp(8px, 1vw, 13px) clamp(17px, 2.8vw, 46px);
+  border: clamp(2px, .25vw, 4px) solid #211045;
+  border-radius: 80px 55px 75px 62px;
+  background: #baff59;
+  box-shadow: 9px 11px 0 #1c1049;
+  color: #201248;
+  font: 700 clamp(24px, 4.2vw, 76px)/1 'Caveat', 'Comic Sans MS', cursive;
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+  animation: willie-sticker-float 4.5s ease-in-out infinite;
+  /* The transform responds to the pointer; translate animates separately. */
+  transform: translate3d(var(--magnetic-x), var(--magnetic-y), 0) rotate(var(--magnetic-rotate)) scale(1);
+  transition: transform .32s cubic-bezier(.2,1.45,.4,1), box-shadow .28s ease, background .28s ease;
+  will-change: translate, transform;
+}
+.play-site .willie-brand-sticker strong {
+  font-weight: 700;
+  color: #6332e7;
+  transition: color .25s ease;
+}
+.play-site .willie-brand-sticker-star {
+  display: inline-block;
+  color: #ff8d52;
+  font: 700 .55em/1 'Fredoka', system-ui, sans-serif;
+}
+.play-site .willie-brand-sticker-star:last-child { transform: rotate(25deg); }
+@media (hover: hover) and (pointer: fine) {
+  .play-site .willie-brand-sticker-shell:hover .willie-brand-sticker {
+    background: #cdff75;
+    box-shadow: 13px 16px 0 #1c1049;
+    transform: translate3d(var(--magnetic-x), var(--magnetic-y), 0) rotate(var(--magnetic-rotate)) scale(1.065);
+  }
+  .play-site .willie-brand-sticker-shell:hover .willie-brand-sticker strong { color: #4217ce; }
+  .play-site .willie-brand-sticker-shell:hover .willie-brand-sticker-star:first-child {
+    animation: willie-star-wiggle .65s ease-in-out both;
+  }
+  .play-site .willie-brand-sticker-shell:hover .willie-brand-sticker-star:last-child {
+    animation: willie-star-wiggle .65s .08s ease-in-out both;
+  }
+}
+@keyframes willie-sticker-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+@keyframes willie-star-wiggle {
+  0%, 100% { rotate: 0deg; scale: 1; }
+  50% { rotate: 35deg; scale: 1.24; }
+}
+@keyframes willie-sticker-rise {
+  from { opacity: 0; translate: 0 32px; scale: .82; }
+  to   { opacity: 1; translate: 0 0; scale: 1; }
+}
+.play-site .willie-brand-caption {
+  position: absolute;
+  right: 1.5%;
+  bottom: -56px;
+  color: #fff;
+  font: 700 clamp(13px, 1.2vw, 20px)/1.15 'Caveat', cursive;
+  transform: rotate(6deg);
+  white-space: nowrap;
+}
+
+.play-site .willie-footer-logo {
+  display: inline-flex;
+  flex-direction: column;
+  width: max-content;
+  text-decoration: none;
+  transform: rotate(-3deg);
+  transition: transform .2s ease;
+}
+.play-site .willie-footer-logo:hover { transform: rotate(0deg) scale(1.03); }
+.play-site .willie-footer-logo > span {
+  color: #baff59;
+  font: 700 clamp(33px, 4vw, 62px)/.9 'Fredoka', system-ui, sans-serif;
+  letter-spacing: -.065em;
+}
+.play-site .willie-footer-logo > small {
+  align-self: flex-end;
+  padding-top: 3px;
+  /* Dark muted purple: readable on the cream footer background. */
+  color: #766f83;
+  font: 700 clamp(20px, 2vw, 31px)/1 'Caveat', cursive;
+}
+@media (max-width: 768px) {
+  .play-site .willie-brand-stage {
+    margin-top: 54px;
+    margin-bottom: 110px;
+  }
+  .play-site .willie-brand-main { font-size: clamp(46px, 18.3vw, 148px); }
+  .play-site .willie-brand-sticker-shell { bottom: -33px; }
+  .play-site .willie-brand-sticker { box-shadow: 5px 6px 0 #1c1049; }
+  .play-site .willie-brand-caption { right: 1%; bottom: -75px; }
+}
+@media (max-width: 480px) {
+  .play-site .willie-brand-stage {
+    margin-top: 46px;
+    margin-bottom: 100px;
+  }
+  .play-site .willie-brand-main {
+    font-size: 18vw;
+    letter-spacing: -.105em;
+  }
+  .play-site .willie-brand-sticker-shell { bottom: -26px; }
+  .play-site .willie-brand-sticker {
+    font-size: clamp(22px, 6.2vw, 32px);
+    padding: 7px 14px 9px;
+  }
+  .play-site .willie-brand-caption { bottom: -66px; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .play-site .willie-brand-letter,
+  .play-site .willie-brand-letter-inner,
+  .play-site .willie-brand-sticker-shell,
+  .play-site .willie-brand-sticker,
+  .play-site .willie-brand-sticker-star { animation: none !important; transition: none !important; }
+  .play-site .willie-brand-sticker-shell:hover .willie-brand-sticker { transform: none; }
+}
+`}</style>;
+}
+
 export default function Portfolio() {
 
   const [filter, setFilter] = useState("all");
@@ -1411,6 +1682,8 @@ export default function Portfolio() {
   return (
 
     <div className="play-site">
+
+      <BrandStyles />
 
       <Header openNav={openNav} setOpenNav={setOpenNav} />
 
